@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Probability & Statistics — Interactive Study Hub</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<style>
+:root{
+--bg:#0b0f17;--bg2:#0f1422;--panel:#141b2b;--panel2:#1b2438;--ink:#e8eefc;--muted:#9fb0d0;
+--line:#25304a;--acc:#5b8cff;--acc2:#22d3a8;--acc3:#ffb454;--vio:#a78bfa;--pink:#f472b6;
+--good:#34d399;--warn:#fbbf24;--bad:#f87171;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--ink);line-height:1.7}
+a{color:var(--acc);text-decoration:none}
+#topbar{position:sticky;top:0;z-index:50;background:rgba(11,15,23,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px;padding:10px 22px}
+.brand{font-weight:800;font-size:1.05rem;letter-spacing:.5px}
+.brand span{color:var(--acc)}
+#search{flex:1;max-width:520px;display:flex}
+#search input{flex:1;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px 14px;color:var(--ink);outline:none;font-size:.9rem}
+#search input:focus{border-color:var(--acc)}
+.tbtn{background:var(--panel);border:1px solid var(--line);color:var(--muted);border-radius:10px;padding:8px 14px;cursor:pointer;font-size:.82rem;transition:.2s}
+.tbtn:hover{border-color:var(--acc);color:var(--ink)}
+#wrap{display:flex;min-height:calc(100vh - 57px)}
+#side{width:288px;flex-shrink:0;background:var(--bg2);border-right:1px solid var(--line);padding:18px 14px;position:sticky;top:57px;height:calc(100vh - 57px);overflow-y:auto}
+.navgrp{margin-bottom:16px}
+.navgrp>h4{font-size:.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--acc2);margin:10px 6px 6px}
+.navgrp>.navl{font-size:.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--acc);margin:10px 6px 6px}
+#side a.nav{display:flex;gap:8px;align-items:baseline;padding:6px 10px;border-radius:8px;color:var(--muted);font-size:.86rem;transition:.15s}
+#side a.nav:hover{background:var(--panel);color:var(--ink)}
+#side a.nav.active{background:var(--panel2);color:var(--ink);border-left:3px solid var(--acc)}
+#side a.nav .tick{margin-left:auto;color:var(--good);font-size:.8rem;visibility:hidden}
+#side a.nav.done .tick{visibility:visible}
+#main{flex:1;padding:34px 44px;max-width:1060px;width:100%}
+.badge{display:inline-block;font-size:.68rem;padding:2px 9px;border-radius:20px;font-weight:700;letter-spacing:.5px;vertical-align:middle}
+.b-src{background:#123d33;color:var(--good)}
+.b-gen{background:#3b2d5a;color:var(--vio)}
+.b-theory{background:#0f2d4c;color:#7dd3fc}
+.b-num{background:#3d2812;color:var(--acc3)}
+.section{margin-bottom:34px}
+h1.title{font-size:1.9rem;font-weight:800;margin-bottom:6px}
+.sub{color:var(--muted);font-size:.95rem;margin-bottom:18px}
+h2{font-size:1.28rem;margin:26px 0 12px;color:var(--acc);border-bottom:1px solid var(--line);padding-bottom:6px}
+h3{font-size:1.08rem;margin:20px 0 10px;color:var(--acc2)}
+h4{font-size:.98rem;margin:14px 0 8px;color:var(--vio)}
+p{margin:10px 0}
+ul,ol{margin:8px 0 8px 22px}
+li{margin:4px 0}
+.defbox{background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--line);border-left:4px solid var(--acc);border-radius:12px;padding:14px 18px;margin:12px 0}
+.defbox .lbl{font-size:.7rem;letter-spacing:2px;color:var(--acc);text-transform:uppercase;font-weight:700}
+.formula{background:#0c2135;border:1px solid #1d4a76;border-radius:10px;padding:14px 18px;margin:12px 0;overflow-x:auto}
+.hinglish{background:rgba(34,211,168,.07);border-left:3px solid var(--acc2);border-radius:0 10px 10px 0;padding:10px 16px;margin:12px 0;font-size:.95rem}
+.hinglish .lbl{color:var(--acc2)}
+.tip{background:rgba(255,180,84,.08);border-left:3px solid var(--acc3);border-radius:0 10px 10px 0;padding:8px 14px;margin:10px 0;font-size:.9rem}
+.tip .lbl{color:var(--acc3)}
+.warnb{background:rgba(248,113,113,.08);border-left:3px solid var(--bad);border-radius:0 10px 10px 0;padding:8px 14px;margin:10px 0;font-size:.9rem}
+.warnb .lbl{color:var(--bad)}
+.exbox{border:1px solid var(--line);border-radius:14px;margin:16px 0;background:var(--panel)}
+.exbox>.exhead{padding:12px 18px;border-bottom:1px solid var(--line);font-weight:700;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.exbox>.exbody{padding:14px 18px}
+.steps{counter-reset:s;margin:10px 0}
+.step{position:relative;padding:8px 12px 8px 44px;margin:6px 0;background:var(--panel2);border-radius:10px}
+.step::before{counter-increment:s;content:counter(s);position:absolute;left:12px;top:9px;background:var(--acc);color:#0b0f17;font-weight:800;border-radius:8px;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:.8rem}
+.final{background:linear-gradient(90deg,#10352b,#0f2d24);border:1px solid #1d6b54;border-radius:10px;padding:10px 16px;margin:12px 0;font-weight:600}
+table.tbl{border-collapse:collapse;margin:12px auto;font-size:.88rem;background:var(--panel2);border-radius:10px;overflow:hidden}
+table.tbl th{background:var(--bg2);color:var(--acc2);padding:7px 12px;border:1px solid var(--line);white-space:nowrap}
+table.tbl td{padding:6px 12px;border:1px solid var(--line);text-align:center}
+table.tbl tr:last-child td{font-weight:600}
+.hiddenb{display:none}
+.revealbtn{background:var(--panel2);border:1px solid var(--line);color:var(--acc2);border-radius:8px;padding:5px 12px;cursor:pointer;font-size:.78rem;margin:4px 4px 4px 0;transition:.2s}
+.revealbtn:hover{border-color:var(--acc2)}
+.trybox{border:1px dashed var(--line);border-radius:12px;margin:14px 0;padding:12px 16px;background:rgba(34,211,168,.03)}
+.trybox>.th{font-weight:700;color:var(--acc2)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:900px){.grid2{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;margin:12px 0}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.statc{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center}
+.statc b{font-size:1.6rem;color:var(--acc)}
+.statc span{color:var(--muted);font-size:.78rem}
+.progressbar{height:8px;background:var(--panel2);border-radius:6px;overflow:hidden;margin:6px 0}
+.progressbar>div{height:100%;background:linear-gradient(90deg,var(--acc),var(--acc2));transition:width .4s}
+.qlist{border:1px solid var(--line);border-radius:12px;margin:10px 0;background:var(--panel)}
+.qitem{padding:12px 16px;border-bottom:1px solid var(--line)}
+.qitem:last-child{border-bottom:none}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+.filters select,.filters input{background:var(--panel);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:7px 10px;font-size:.85rem}
+.markbtn{background:none;border:1px solid var(--line);color:var(--muted);border-radius:8px;padding:4px 10px;cursor:pointer;font-size:.72rem}
+.markbtn.done-btn{border-color:var(--good);color:var(--good)}
+.codeblk{background:#0a0e16;border:1px solid var(--line);border-radius:10px;padding:12px 16px;font-family:Consolas,monospace;font-size:.85rem;white-space:pre;overflow-x:auto;margin:12px 0}
+.tocnote{font-size:.82rem;color:var(--muted)}
+@media(max-width:1100px){#side{width:230px}#main{padding:24px}}
+@media(max-width:860px){#side{display:none}#main{padding:20px}}
+</style>
+</head>
+<body>
+<div id="topbar">
+  <div class="brand">Prob<span>&</span>Stat <span style="color:var(--muted);font-weight:400;font-size:.8rem">Study Hub</span></div>
+  <div id="search"><input id="q" placeholder="Search topics, formulas, definitions…"></div>
+  <button class="tbtn" onclick="go('dash')">Dashboard</button>
+  <button class="tbtn" onclick="go('defbank')">Definition Bank</button>
+  <button class="tbtn" onclick="go('formulas')">Formula Sheet</button>
+  <button class="tbtn" onclick="go('qbank')">Question Bank</button>
+</div>
+<div id="wrap">
+<nav id="side"></nav>
+<main id="main">
+<div class="pg" id="dash">
+<h1 class="title">Probability &amp; Statistics — Interactive Study Hub</h1>
+<p class="sub">Digital Textbook + Interactive Dashboard + University Exam Preparation System · Chandigarh University course material (H. K. Dass, B. S. Grewal, N. P. Bali, S. P. Gupta etc. based)</p>
+<div class="card">
+<h3 style="margin-top:0">Your Study Progress</h3>
+<div class="progressbar"><div id="dashprog" style="width:0%"></div></div>
+<p class="tocnote">Sections completed: <b id="dashcount">0</b>. Har topic page ke bottom pe "Mark Complete" dabao — progress browser mein save rehti hai.</p>
+</div>
+<div class="cards">
+<div class="statc"><b>3</b><span>Syllabus Units</span></div>
+<div class="statc"><b>16</b><span>Topic Chapters</span></div>
+<div class="statc"><b>25+</b><span>Solved Examples</span></div>
+<div class="statc"><b>40+</b><span>Practice Questions</span></div>
+<div class="statc"><b>30+</b><span>Exam Definitions</span></div>
+<div class="statc"><b>3</b><span>Exam Tools</span></div>
+</div>
+<h2>Course Outcomes (CO1–CO5)</h2>
+<table class="tbl">
+<tr><th>CO</th><th>BT Level</th><th>Description</th></tr>
+<tr><td>CO1</td><td>BT3</td><td style="text-align:left">To understand fundamental concepts of probability theory and statistics.</td></tr>
+<tr><td>CO2</td><td>BT4</td><td style="text-align:left">Identify and formulation of engineering problems in different situations involving probabilistic and statistical measures.</td></tr>
+<tr><td>CO3</td><td>BT5</td><td style="text-align:left">Classify various types of statistical methods and perform statistical inference.</td></tr>
+<tr><td>CO4</td><td>BT4</td><td style="text-align:left">Apply appropriate statistical tools, distributions including correlation and regression analysis techniques.</td></tr>
+<tr><td>CO5</td><td>BT5</td><td style="text-align:left">Implement the standard concepts and tools at an intermediate to advanced level that will help in tackling various problems in hypothesis testing.</td></tr>
+</table>
+<h2>Units At A Glance</h2>
+<div class="grid2">
+<div class="card"><h3 style="margin-top:0">Unit 1 · Basic Statistics</h3><p class="tocnote">Central Tendency (Mean, Median, Mode), Combined &amp; Weighted Mean, Dispersion (Range, Quartile Deviation, Mean Deviation, Standard Deviation, Variance, CV). <a href="#u1intro">Start →</a></p></div>
+<div class="card"><h3 style="margin-top:0">Unit 2 · Moments, Skewness &amp; Kurtosis</h3><p class="tocnote">Raw/Central moments, Moment relations, Pearson β/γ coefficients, Sheppard corrections, Skewness (Pearson, Bowley), Kurtosis (Lepto/Meso/Platykurtic). <a href="#u2moments">Start →</a></p></div>
+<div class="card"><h3 style="margin-top:0">Unit 3 · Probability &amp; Distributions</h3><p class="tocnote">Probability laws, Conditional probability &amp; Bayes, Random variables (PMF/PDF/CDF), Binomial, Poisson &amp; Normal distributions. <a href="#u3prob">Start →</a></p></div>
+<div class="card"><h3 style="margin-top:0">Exam Toolkit</h3><p class="tocnote"><a href="#defbank">Definition Bank</a> · <a href="#formulas">Formula Sheet</a> · <a href="#qbank">Master Question Bank</a> · <a href="#quiz">Mock Quiz</a></p></div>
+</div>
+<div class="hinglish"><b class="lbl">Kaise use karein:</b> Pehle topic notes padho (Formal Definition → Hinglish Explanation → Formula → Solved Examples), phir "Try Yourself" questions bina dekhe solve karo, aur aakhir mein Question Bank se unit-wise practice karo. Exam se pehle Definition Bank aur Formula Sheet revise karo.</div>
+</div>
+
+<div class="pg" id="road">
+<h1 class="title">🧭 Study Roadmap &amp; Syllabus Map</h1>
+<p class="sub">Source lectures ko syllabus flow mein organize kiya gaya hai. Order follow karo for best results.</p>
+<h2>Official Flow</h2>
+<table class="tbl">
+<tr><th>#</th><th>Unit</th><th>Lectures (Source)</th><th>Key Topics</th></tr>
+<tr><td>1</td><td style="text-align:left">Basic Statistics — Central Tendency &amp; Dispersion</td><td style="text-align:left">1.1, 1.2, 1.3, 1.4, 1.5, 1.7; Lectures 1.1.1–1.1.3; NPTEL Lec 04; SD slide deck</td><td style="text-align:left">Mean (3 methods), Median, Mode, Combined/Weighted Mean, Range, QD, MD, SD, Variance, CV</td></tr>
+<tr><td>2</td><td style="text-align:left">Moments, Skewness &amp; Kurtosis</td><td style="text-align:left">2.1, 2.2, 2.3, 2.4; Lectures 1.3.2–1.3.3; NPTEL Lec 36; Kurtosis slide deck</td><td style="text-align:left">Moments, μ-relations, β₁/γ₁/β₂/γ₂, Pearson &amp; Bowley skewness, Kurtosis classes</td></tr>
+<tr><td>3</td><td style="text-align:left">Probability &amp; Probability Distributions</td><td style="text-align:left">3.1, 3.2, 3.3, 3.4, 3.5, 3.6</td><td style="text-align:left">Laws of probability, Bayes, RV, PMF/PDF/CDF, Binomial, Poisson, Normal</td></tr>
+</table>
+<h2>Prescribed Books</h2>
+<ul>
+<li><b>T1</b> — H. K. Dass, <i>Higher Engineering Mathematics</i>, S. Chand, 3rd revised ed., 2014</li>
+<li><b>T2</b> — B. S. Grewal, <i>Higher Engineering Mathematics</i>, Khanna, 42nd ed., 2013</li>
+<li><b>T3</b> — N. P. Bali &amp; Manish Goyal, <i>A Textbook of Engineering Mathematics</i>, Laxmi, Reprint 2008</li>
+<li><b>R1</b> — R. K. Jain &amp; S. R. K. Iyengar, <i>Advanced Engineering Mathematics</i>, Narosa, 3rd ed., 2004</li>
+<li><b>R2</b> — B. V. Ramana, <i>Advanced Engineering Mathematics</i>, McGraw-Hill, 2006</li>
+<li><b>R3</b> — S. P. Gupta, <i>Statistical Methods</i>, S. Chand &amp; Sons, 2017</li>
+</ul>
+<div class="tip"><b class="lbl">Exam Strategy:</b> Unit 1 aur Unit 3 ke numerical questions exam mein sabse zyada aate hain. Unit 2 ke definitions + β/γ formulas short-answer mein pakka aate hain. Pehle formula sheet memorize karo, phir question bank solve karo.</div>
+</div>
+
+<div class="pg" id="u1intro">
+<h1 class="title">Unit 1 · 1.1 Introduction of Basic Statistics</h1>
+<p class="sub">Lecture 1.1 · <span class="badge b-src">SOURCE CONTENT</span></p>
+<h2>1. Formal Definitions</h2>
+<div class="defbox"><span class="lbl">Formal Definition — Probability Theory</span><p><b>Probability theory</b> is the study of the mathematical rules that govern random events.</p></div>
+<div class="defbox"><span class="lbl">Formal Definition — Statistics</span><p><b>Statistics</b> is the application of probability to the collection, analysis, and description of random data.</p></div>
+<div class="defbox"><span class="lbl">Formal Definition — Random Event (informal)</span><p>A <b>random event</b> is an event in which we do not know the outcome without observing it. Probability tells us what we can say about such events, given our assumptions about the possible outcomes.</p></div>
+<div class="hinglish"><b class="lbl">Hinglish Explanation:</b> Probability ka kaam hai randomness ko mathematical rules mein capture karna — jaise coin toss ka outcome pehle se pakka nahi hota, par uske chances quantify kar sakte hain. Statistics probability ko real data pe apply karta hai: experiments design karna, data summarize karna, aur duniya ke baare mein conclusions nikalna. Simple words mein — <i>Probability theory banati hai, Statistics usse data pe lagata hai.</i></div>
+<h2>2. What Statistics Is Used For</h2>
+<ul><li>Design experiments</li><li>Summarize data</li><li>Make conclusions about the world</li><li>Explore complex data</li></ul>
+<h2>3. Population vs Sample</h2>
+<div class="defbox"><span class="lbl">Formal Definition — Population &amp; Sample</span><p>A <b>population</b> is the entire collection of objects under study (e.g. all games played by Babe Ruth). A <b>sample</b> is a subset of the population (e.g. a random sample of 20 games). Measures computed from the entire population are <b>population parameters</b>; from a sample they are <b>sample statistics</b> (sample mean, sample median, sample mode).</p></div>
+<div class="hinglish"><b class="lbl">Hinglish:</b> Population matlab poori collection — har member ke paas variable ki ek value hoti hai (yahi <b>data</b> hai). Agar poore population pe mean/median/mode nikalein toh <b>population mean</b> etc. milta hai; sample se nikala toh <b>sample mean</b> — jo population ka estimate hota hai. Exam mein "population vs sample" ka distinction frequently poocha jata hai.</div>
+<h2>4. Applications of Probability &amp; Statistics</h2>
+<div class="grid2">
+<div class="card"><h4 style="margin-top:0">Computer Science</h4><p class="tocnote">Machine Learning · Data Mining · AI · Simulation · Image Processing · Computer Graphics · Visualization · Software Testing · Algorithms</p></div>
+<div class="card"><h4 style="margin-top:0">Electrical Engineering</h4><p class="tocnote">Signal Processing · Telecommunications · Information Theory · Control Theory · Instrumentation/Sensors · Hardware Testing</p></div>
+<div class="card"><h4 style="margin-top:0">General</h4><p class="tocnote">Stock Market Analysis · Politics · Sports · Demographics · Medicine · Economics · All Sciences</p></div>
+<div class="card"><h4 style="margin-top:0">Historical Note</h4><p class="tocnote">Alan Turing — "Father of Computer Science" — wrote a dissertation on probability theory and used probability &amp; statistics to crack Enigma in WWII.</p></div>
+</div>
+<h2>5. Engineering Applications (Slide Deck)</h2>
+<ul><li><b>Descriptive statistics</b> summarize datasets like material strength or temperature readings.</li><li><b>Inferential statistics</b> allow prediction of future performance based on sample data.</li><li>Applications: quality control, reliability analysis, process optimization, Six-σ defect reduction, control charts (mean/range monitoring).</li></ul>
+<div class="trybox"><span class="th">TRY YOURSELF</span>
+<p>Q1. Statistics aur Probability theory mein main difference kya hai? Formal definition ke saath likho.</p>
+<button class="revealbtn" data-l="Show Hint" onclick="rev(this)">Show Hint</button><div class="hiddenb hinglish">Ek mathematical rules ki study hai (random events ki), doosri un rules ka application hai real data collection/analysis pe.</div>
+<button class="revealbtn" data-l="Show Answer" onclick="rev(this)">Show Answer</button><div class="hiddenb">Probability theory = study of mathematical rules governing random events. Statistics = application of probability to collection, analysis and description of random data.</div>
+</div>
+<div class="tip"><b class="lbl">Exam Focus:</b> Definitions of statistics/probability, population vs sample, and applications — short-answer (2 marks) questions ke liye ready rakho.</div>
+<button class="markbtn" onclick="markDone('u1intro')">✔ Mark Section Complete</button>
+</div>
+<div class="pg" id="u1central">
+<h1 class="title">Unit 1 · 1.2 Measures of Central Tendency</h1>
+<p class="sub">Lecture 1.2 · Mean, Median, Mode <span class="badge b-src">SOURCE CONTENT</span></p>
+
+<h2>1. Big Picture (Hinglish)</h2>
+<div class="hinglish"><b class="lbl">Concept:</b> Jab do ya zyada datasets compare karne hote hain, toh sirf frequency distribution ya graphs se baat nahi banti — data ko ek <b>single value</b> mein summarize karna padta hai. Ye value center ke aas-paas hoti hai, aur poore dataset ko represent karti hai — isliye isse <b>measure of central tendency</b> (ya average) kehte hain. Kyunki ye value distribution ki X-axis pe position batati hai, isse <b>measure of location/position</b> bhi kehte hain. Types: Arithmetic Mean, Geometric Mean, Harmonic Mean, Median, Mode — par hamare course mein main focus Mean, Median, Mode pe hai.</div>
+
+<h2>2. Arithmetic Mean</h2>
+<div class="defbox"><span class="lbl">Formal Definition — Arithmetic Mean</span><p><b>Arithmetic Mean</b> is the value obtained by dividing the sum of all the observations by the number of observations: \(\bar{x} = \frac{\sum x_i}{n}\) (ungrouped), \(\bar{x} = \frac{\sum f_i x_i}{\sum f_i}\) (grouped).</p></div>
+<h3>Three Methods for Grouped Data</h3>
+<div class="formula"><b>Direct Method</b>: \(\bar{x} = \frac{\sum_{i=1}^{n} f_i x_i}{\sum_{i=1}^{n} f_i}\), n = \(\sum f_i\)</div>
+<div class="formula"><b>Short-cut (Assumed Mean) Method</b>: \(\bar{x} = A + \frac{\sum f_i D_i}{\sum f_i}\), where \(D_i = x_i - A\), A = assumed mean</div>
+<div class="formula"><b>Step-Deviation Method</b>: \(\bar{x} = A + \frac{\sum f_i u_i}{\sum f_i} \times h\), where \(u_i = \frac{x_i - A}{h}\), h = class width</div>
+<div class="hinglish"><b class="lbl">Method Selection (Hinglish):</b> Direct method sabse straightforward hai — midpoint × frequency karke divide karo. Agar numbers bade hain, toh <b>short-cut</b> method se ek assumed mean A ghata ke calculations aasaan ho jaati hain. Agar class intervals equal width ke hain, toh <b>step-deviation</b> best hai kyunki deviations h se divide karke chhote integers ban jaate hain. Exam mein agar "step deviation method" bola gaya hai, toh wahi use karna mandatory hai.</div>
+
+<div class="exbox"><div class="exhead">Example 1 — Mean (Ungrouped, Basic) <span class="badge b-src">SOURCE</span></div><div class="exbody">
+<p><b>Problem:</b> Marks of 9 students: 45, 32, 37, 46, 39, 36, 41, 48, 36. Find mean.</p>
+<div class="steps">
+<div class="step">Sum: 45+32+37+46+39+36+41+48+36 = 360; n = 9</div>
+<div class="step">Mean \(\bar{x} = 360/9 = 40\)</div>
+</div>
+<div class="final">Final Answer: Mean = 40 marks.</div>
+</div></div>
+
+<div class="exbox"><div class="exhead">Example 2 — Mean for Grouped Data (All 3 Methods) <span class="badge b-src">SOURCE</span></div><div class="exbody">
+<p><b>Problem:</b> Weights (grams) of 60 apples. Compute mean via (a) Direct, (b) Short-cut, (c) Step-deviation.</p>
+<table class="tbl">
+<tr><th>Weight (g)</th><th>Midpoint \(x_i\)</th><th>\(f_i\)</th><th>\(f_i x_i\)</th></tr>
+<tr><td>65–84</td><td>74.5</td><td>9</td><td>670.5</td></tr>
+<tr><td>85–104</td><td>94.5</td><td>10</td><td>945.0</td></tr>
+<tr><td>105–124</td><td>114.5</td><td>17</td><td>1946.5</td></tr>
+<tr><td>125–144</td><td>134.5</td><td>10</td><td>1345.0</td></tr>
+<tr><td>145–164</td><td>154.5</td><td>5</td><td>772.5</td></tr>
+<tr><td>165–184</td><td>174.5</td><td>4</td><td>698.0</td></tr>
+<tr><td>185–204</td><td>194.5</td><td>5</td><td>972.5</td></tr>
+<tr><td>Total</td><td>—</td><td>60</td><td>7350.0</td></tr>
+</table>
+<div class="steps">
+<div class="step">(a) Direct: \(\bar{x} = 7350.0/60 = 122.5\) g</div>
+<div class="step">(b) Short-cut with A = 114.5: \(\sum f_i D_i = +480 \Rightarrow \bar{x} = 114.5 + 480/60 = 114.5 + 8 = 122.5\) g</div>
+<div class="step">(c) Step-deviation with h = 20: \(\sum f_i u_i = 24 \Rightarrow \bar{x} = 114.5 + \frac{24}{60}\times20 = 114.5 + 8 = 122.5\) g</div>
+</div>
+<div class="final">Final Answer: Mean weight = 122.5 grams (all three methods agree).</div>
+<p class="tip"><b class="lbl">Exam Tip:</b> Table mein midpoint n = (lower+upper)/2 likhna aur total row banana zaroori hai — direct full marks milte hain.</p>
+</div></div>
+
+<h3>Properties of Arithmetic Mean (Exam favorites)</h3>
+<ul>
+<li>The mean of a constant is that constant itself.</li>
+<li>The sum of deviations from the mean is zero: \(\sum (x_i - \bar{x}) = 0\).</li>
+<li>The sum of squared deviations is minimized at the mean: \(\sum(x_i-\bar{x})^2 \le \sum(x_i-A)^2\) for any A.</li>
+<li>Arithmetic mean is affected by change of origin and scale (adding/subtracting/multiplying/dividing every value by a constant changes the mean accordingly).</li>
+<li>Given group means and sizes, the composite (combined) mean can be found algebraically.</li>
+</ul>
+<h3>Advantages</h3>
+<ul><li>Readily understood; easy computation; algebraic treatment possible (combined mean).</li><li>Can be computed even if individual observations are unknown — only their sum and count needed.</li><li>No need to arrange data (unlike median) or form distribution (unlike mode).</li><li>Stable against sampling fluctuations — most reliable average.</li></ul>
+<h3>Disadvantages</h3>
+<ul><li>Cannot be obtained by inspection (unlike median/mode).</li><li>Badly affected by extreme values; cannot be computed from open-end classes.</li><li>May not be an actual value of the variable (e.g. 2.54 children per family).</li></ul>
+
+<h2>3. Median</h2>
+<div class="defbox"><span class="lbl">Formal Definition — Median</span><p><b>Median</b> is the value of the middle-most observation when the data is arranged in ascending (or descending) order. For odd n it is the \(\frac{n+1}{2}\)th observation; for even n it is the mean of the \(\frac{n}{2}\)th and \(( \frac{n}{2}+1 )\)th observations.</p></div>
+<div class="hinglish"><b class="lbl">Why median? (Hinglish):</b> Example from source: office mein 4 workers ki salaries 5000, 6500, 7500, 8000 aur supervisor ki 20000. Mean = (5000+6500+7500+8000+20000)/5 = 47000/5 = 9400 — par 4 mein se 4 log is se bahut kam kama rahe hain! Mean extreme values se distort ho jaata hai. Median isliye use karte hain — wo extreme values se affect nahi hota.</div>
+<div class="exbox"><div class="exhead">Example 3 — Median of Ungrouped Data <span class="badge b-src">SOURCE</span></div><div class="exbody">
+<p><b>Problem:</b> Marks (out of 15) of 35 students (frequency table in source). Find median.</p>
+<div class="steps"><div class="step">With frequencies, cumulative frequency hai 18th observation ki value = 7.</div><div class="step">Median = value of \(\frac{n+1}{2} = \frac{35+1}{2} = 18\)th observation.</div></div>
+<div class="final">Final Answer: Median = 7 marks.</div></div></div>
+<h4>Advantages</h4>
+<ul><li>Easy to understand and calculate; works even with open-end classes / unequal widths.</li><li>Applicable to qualitative data where ranking is possible.</li></ul>
+<h4>Disadvantages</h4>
+<ul><li>Data must be arranged in order.</li><li>Cannot be treated algebraically (composite median impossible).</li><li>Unsuitable when large/small values need weightage; interpolation assumes uniform spread in median class.</li><li>More affected by sampling fluctuations than A.M.</li></ul>
+
+<h2>4. Mode</h2>
+<div class="defbox"><span class="lbl">Formal Definition — Mode</span><p><b>Mode</b> is the observation that occurs most frequently in the data, i.e., the observation with maximum frequency. A distribution with one/two/more modes is unimodal/bimodal/multimodal; if all values have equal frequency, no mode exists.</p></div>
+<div class="exbox"><div class="exhead">Example 4 — Mode (Raw Data) <span class="badge b-src">SOURCE</span></div><div class="exbody">
+<p><b>Problem:</b> Goals scored by a football team in 12 matches: 1, 2, 2, 3, 1, 2, 2, 4, 5, 3, 3, 4.</p>
+<div class="steps"><div class="step">Frequency of 2 is 4 — maximum.</div></div>
+<div class="final">Final Answer: Modal score = 2.</div></div></div>
+<div class="exbox"><div class="exhead">Example 5 — Two Modes <span class="badge b-src">SOURCE</span></div><div class="exbody">
+<p><b>Problem:</b> Data: 9, 6, 8, 9, 10, 7, 12, 15, 22, 15.</p>
+<div class="steps"><div class="step">Arrange: 6,7,8,9,9,10,12,15,15,22.</div><div class="step">Both 9 and 15 have frequency 2 (maximum).</div></div>
+<div class="final">Final Answer: Modes = 9 and 15 (bimodal).</div></div></div>
+<h4>Advantages</h4>
+<ul><li>Often obtained by mere inspection; unaffected by extreme values.</li><li>Can be found for open-end classes (with equal-width classes and gradual concentration).</li></ul>
+<h4>Disadvantages</h4>
+<ul><li>Meaningless without large data; may not exist or may be non-unique.</li><li>Difficult from grouped data; cannot be treated algebraically.</li></ul>
+
+<h2>5. Practice Questions (Source)</h2>
+<div class="trybox"><span class="th">TRY YOURSELF</span>
+<p>Q1. Goals scored in 11 matches: 1, 0, 3, 2, 4, 5, 2, 4, 4, 2, 5. Determine the median score.</p>
+<button class="revealbtn" data-l="Show Hint" onclick="rev(this)">Show Hint</button><div class="hiddenb hinglish">Pehle ascending order mein arrange karo, phir (n+1)/2 = 6th value dekho.</div>
+<button class="revealbtn" data-l="Show Answer" onclick="rev(this)">Show Answer</button><div class="hiddenb final">Arranged: 0,1,2,2,2,3,4,4,4,5,5 → 6th value = 3. Median = 3.</div>
+<p>Q2. Marks of 12 students: 46, 52, 48, 39, 41, 62, 55, 53, 96, 39, 45, 99. Calculate the median.</p>
+<button class="revealbtn" data-l="Show Hint" onclick="rev(this)">Show Hint</button><div class="hiddenb hinglish">n even hai (12), toh 6th aur 7th values ka average lena hai after sorting.</div>
+<button class="revealbtn" data-l="Show Answer" onclick="rev(this)">Show Answer</button><div class="hiddenb final">Arranged: 39,39,41,45,46,48,52,53,55,62,96,99 → Median = (48+52)/2 = 50.</div>
+<p>Q3. Find the mode of: 5, 10, 3, 7, 2, 9, 6, 2, 11, 2.</p>
+<button class="revealbtn" data-l="Show Hint" onclick="rev(this)">Show Hint</button><div class="hiddenb hinglish">Har value ki frequency count karo — sabse zyada baar kaun?</div>
+<button class="revealbtn" data-l="Show Answer" onclick="rev(this)">Show Answer</button><div class="hiddenb final">2 appears 3 times — Mode = 2.</div>
+<p>Q4. TV sets in 15 households: 2,2,4,2,1,1,1,2,1,1,3,3,1,3,0. Mode?</p>
+<button class="revealbtn" data-l="Show Hint" onclick="rev(this)">Show Hint</button><div class="hiddenb hinglish">1 kitni baar aaya? 2 kitni baar? Compare counts.</div>
+<button class="revealbtn" data-l="Show Answer" onclick="rev(this)">Show Answer</button><div class="hiddenb final">1 appears 6 times → Mode = 1.</div>
+<p class="tocnote">Q1–Q4 <span class="badge b-src">SOURCE QUESTIONS</span> Answers <span class="badge b-gen">GENERATED SOLUTIONS</span></p>
+</div>
+<div class="tip"><b class="lbl">Exam Focus:</b> Mean properties (deviations sum = 0), methods of mean for grouped data, and advantages/disadvantages of mean/median/mode — repeatedly asked as theory + numerical.</div>
+<button class="markbtn" onclick="markDone('u1central')">✔ Mark Section Complete</button>
+</div>
+<div class="pg" id="u1combined">
+<h1 class="title">Unit 1 · 1.3 Combined Mean &amp; Weighted Mean</h1>
+<p class="sub">Lecture 1.3 + 1.1.1–1.1.3 <span class="badge b-src">SOURCE CONTENT</span></p>
+<h2>1. Combined Mean (Composite Mean)</h2>
+<div class="defbox"><span class="lbl">Formal Definition — Combined Mean</span><p>When two or more groups have different means and different numbers of observations, the mean of the combined group is called the <b>Combined Mean</b> (also Composite Mean). For two groups: \(\bar{X}_c = \frac{n_1\bar{X}_1 + n_2\bar{X}_2}{n_1 + n_2}\).</p></div>
+<div class="hinglish"><b class="lbl">Hinglish Explanation:</b> Combined mean basically groups ko merge karke overall average nikalta hai. Har group ka mean uski size se weight hota hai — bada group zyada influence karta hai. Steps: (1) har mean ko uski group size se multiply karo, (2) products add karo, (3) total observations add karo, (4) divide. Note: combined mean hamesha individual means ke beech mein aata hai.</div>
+<h3>Procedure (Method)</h3>
+<ol><li>Multiply each mean by its group size \(n_i\bar{X}_i\)</li><li>Add all products \(\sum n_i\bar{X}_i\)</li><li>Add total observations \(\sum n_i\)</li><li>Divide total product by total observations</li></ol>
+
+<div class="exbox"><div class="exhead">Example 1 — Two Sections <span class="badge b-src">SOURCE</span></div><div class="exbody">
+<p><b>Problem:</b> Average marks of 40 students in Section A = 65; 35 students in Section B = 70. Find combined mean.</p>
+<div class="steps">
+<div class="step">Given: \(n_1=40, \bar{X}_1=65, n_2=35, \bar{X}_2=70\)</div>
+<div class="step">Numerator: \(40 \times 65 + 35 \times 70 = 2600 + 2450 = 5050\)</div>
+<div class="step">Denominator: \(40 + 35 = 75\)</div>
+</div>
+<div class="final">Final Answer: \(\bar{X}_c = 5050/75 = 67.33\)</div>
+</div></div>
+
+<div class="exbox"><div class="exhead">Example 2 — Salaries <span class="badge b-src">SOURCE</span></div><div class="exbody">
+<p><b>Problem:</b> Average salary of 25 male employees ₹40,000; of 15 female employees ₹35,000. Combined average?</p>
+<div class="steps">
+<div class="step">Numerator: \(25 \times 40000 + 15 \times 35000 = 1000000 + 525000 = 1525000\)</div>
+<div class="step">Denominator: 40</div>
+</div>
+<div class="final">Final Answer: Combined average salary = ₹1525000/40 = <b>₹38,125</b>.</div>
+</div></div>
+
+<h2>2. Weighted Mean</h2>
+<div class="defbox"><span class="lbl">Formal Definition — Weighted Mean</span><p>When different observations are assigned different levels of importance (weights), the average obtained is called the <b>Weighted Mean</b>: \(\bar{X}_w = \frac{\sum w_i x_i}{\sum w_i}\).</p></div>
+<div class="hinglish"><b class="lbl">HinglishExplanation:</b> Kabhi kabhi har value equal important nahi hoti — jaise consumer har saal alag quantity kharidta hai. Toh har value ko uske weight (quantity) se multiply karke divide karte hain. Probability mein weights = probabilities, aur weighted mean = <b>expected value</b> ke barabar hota hai — ye connection exams ke liye important hai.</div>
+<ol><li>Multiply each value by its weight</li><li>Add all weighted values \(\sum w_i x_i\)</li><li>Add all weights \(\sum w_i\)</li><li>Divide weighted total by weight total</li></ol>
+
+<div class="exbox"><div class="exhead">Example 3 — Commodity Prices (Weighted vs Simple) <span class="badge b-src">SOURCE</span></div><div class="exbody">
+<p><b>Problem:</b> A consumer buys a commodity @ ₹4.80, ₹6, ₹8, ₹12, ₹24 per unit in five successive years. Find average cost per unit if he buys (a) 1000 units each year (b) 1000, 800, 600, 400, 200 units respectively.</p>
+<div class="steps">
+<div class="step">(a) Equal weights: \(\bar{x} = (4.80+6+8+12+24)/5 = 54.80/5 = ₹10.96\)</div>
+<div class="step">(b) Weights 1000,800,600,400,200 → weighted value = \(4.8(1000)+6(800)+8(600)+12(400)+24(200) = 4800+4800+4800+4800+4800 = 24000\); total weight = 3000</div>
+<div class="step">Weighted mean = 24000/3000 = ₹8.00</div>
+</div>
+<div class="final">Final Answer: (a) ₹10.96, (b) ₹8.00 per unit. Weight diversion se mean kaise badalta hai — ye weighted mean ka point hai.</div>
+<p class="tip"><b class="lbl">Exam Tip:</b> Jab quantities/weights different hain, weighted mean simple mean se different aayega — exam exactly yahi test karta hai.</p>
+</div></div>
+
+<h2>3. Connection to Probability (Lecture 1.1.1–1.1.3)</h2>
+<ul><li>Combined mean is a linear combination of individual means scaled by frequencies.</li><li>If weights sum to 1, weighted mean = expected value \(E(X)\) of a discrete random variable.</li><li>Missing mean/frequency problems: rearrange the combined-mean formula algebraically.</li></ul>
+<h2>4. Practice (Source)</h2>
+<div class="trybox"><span class="th">TRY YOURSELF</span>
+<p>Q1. Average daily wages: factory A (10 workers) = ₹30; factory B (20 workers) = ₹15. Combined average?</p>
+<button class="revealbtn" data-l="Show Hint" onclick="rev(this)">Show Hint</button><div class="hiddenb hinglish">n1=10, x̄1=30; n2=20, x̄2=15. Formula lagao.</div>
+<button class="revealbtn" data-l="Show Answer" onclick="rev(this)">Show Answer</button><div class="hiddenb final">(10·30 + 20·15)/(10+20) = (300+300)/30 = ₹20.</div>
+<p>Q2. Average wages of all 90 workers = ₹60; female workers average = ₹45. Male workers are one-third of total. Find male average.</p>
+<button class="revealbtn" data-l="Show Hint" onclick="rev(this)">Show Hint</button><div class="hiddenb hinglish">Males = 30, females = 60. Combined mean equation mein unknown male mean ko x likho.</div>
+<button class="revealbtn" data-l="Show Answer" onclick="rev(this)">Show Answer</button><div class="hiddenb final">(30x + 60·45)/90 = 60 ⇒ 30x + 2700 = 5400 ⇒ x = 90. Male average = ₹90.</div>
+<p class="tocnote">Q1–Q2 <span class="badge b-src">SOURCE QUESTIONS</span> Answers <span class="badge b-gen">GENERATED SOLUTIONS</span></p>
+</div>
+<div class="tip"><b class="lbl">Exam Focus:</b> Combined mean formula (2 groups), missing mean problems, weighted vs simple mean difference — common 5-mark numericals.</div>
+<button class="markbtn" onclick="markDone('u1combined')">✔ Mark Section Complete</button>
+</div>
+
+<div class="pg" id="u1range">
+<h1 class="title">Unit 1 · 1.4 Measures of Dispersion — Range &amp; Quartile Deviation</h1>
+<p class="sub">Lecture 1.4 + NPTEL Lecture 04 <span class="badge b-src">SOURCE CONTENT</span></p>
+<h2>1. Concept of Dispersion (Hinglish)</h2>
+<div class="hinglish"><b class="lbl">Concept:</b> Sirf averages dataset nahi describe karte. Example from source: do paddy varieties ka mean yield dono ka 42 kg — par ek consistent, doosri variable. Consistency ko measure karne ke liye <b>dispersion</b> chahiye — matlab observations average se kitne "scattered" hain. Measures: Range, Quartile Deviation, Mean Deviation, Standard Deviation. Ek achhi measure of dispersion rigidly defined ho, all items pe based ho, extreme items se unduly affect na ho, algebraic treatment allow kare, aur simple ho.</div>
+<h2>2. Range</h2>
+<div class="defbox"><span class="lbl">Formal Definition — Range</span><p><b>Range</b> is the simplest measure of dispersion, defined as the difference between the largest and the smallest values of the variable: \(R = L - S\) where L = largest value, S = smallest value.</p></div>
+<p>In continuous series, two methods: (1) L = upper boundary of highest class, S = lower boundary of lowest class; (2) L = mid-value of highest class, S = mid-value of lowest class.</p>
+<div class="grid2"><div class="card"><h4 style="margin-top:0">Merits</h4><ul><li>Simple to understand; easy to calculate.</li><li>Widely used in quality control, weather forecasts, share-price analysis.</li></ul></div>
+<div class="card"><h4 style="margin-top:0">Demerits</h4><ul><li>Very much affected by extreme items; based on only two observations.</li><li>Cannot be calculated from open-end classes; not suitable for mathematical treatment; rarely used.</li></ul></div></div>
+<div class="exbox"><div class="exhead">Example 1 — Range &amp; Percentage Change <span class="badge b-src">SOURCE</span></div><div class="exbody">
+<p><b>Problem:</b> Weights of 11 forty-year-old men: 148, 154, 158, 160, 161, 162, 166, 170, 180, 195, 236 pounds. If the heaviest man is omitted, what is the percentage change in the range?</p>
+<div class="steps">
+<div class="step">Original range: 236 − 148 = 168</div>
+<div class="step">After omitting 236: new range = 195 − 148 = 47</div>
+<div class="step">Percentage change = (168−47)/168 × 100 = 121/168 × 100 ≈ 72.02% decrease</div>
+</div>
+<div class="final">Final Answer: Range decreases by ≈ 72% — showing how sensitive range is to extreme values.</div>
+<p class="tip"><b class="lbl">Exam Tip:</b> Ye question range ki extreme-value sensitivity ko test karta hai — classic concept-understanding check.</p>
+</div></div>
+
+<h2>3. Quartile Deviation (Semi-Interquartile Range)</h2>
+<div class="defbox"><span class="lbl">Formal Definition — Quartile Deviation</span><p><b>Quartile Deviation</b> is an absolute measure of dispersion based on quartiles, also known as the <b>semi-interquartile range</b>: \(Q.D. = \frac{Q_3 - Q_1}{2}\), where interquartile range \(= Q_3 - Q_1\).</p></div>
+<div class="formula">Individual series: \(Q_1\) = value of \(( \frac{n+1}{4} )\)th item; \(Q_3\) = value of \(( \frac{3(n+1)}{4} )\)th item.</div>
+<div class="formula">Continuous series: \(Q_1 = L + ( \frac{\frac{n}{4} - m}{f} )C\), \(Q_3 = L_1 + ( \frac{\frac{3n}{4} - m_1}{f_1} )C\), where L = lower limit of quartile class, m = preceding cumulative frequency, f = quartile-class frequency, C = class length.</div>
+<div class="exbox"><div class="exhead">Example 2 — Quartiles of Raw Data <span class="badge b-src">SOURCE</span></div><div class="exbody">
+<p><b>Problem:</b> Find upper/lower quartiles and quartile deviation of: 36, 43, 47, 28, 18, 9, 32.</p>
+<div class="steps">
+<div class="step">Arrange: 9, 18, 28, 32, 36, 43, 47 (n = 7)</div>
+<div class="step">Q1 = value of (7+1)/4 = 2nd item = 18; Q3 = value of 3·(7+1)/4 = 6th item = 43</div>
+<div class="step">Q.D. = (43 − 18)/2 = 12.5</div>
+</div>
+<div class="final">Final Answer: Q1 = 18, Q3 = 43, Q.D. = 12.5</div>
+</div></div>
+<div class="exbox"><div class="exhead">Example 3 — QD of 9 Values <span class="badge b-src">SOURCE</span></div><div class="exbody">
+<p><b>Problem:</b> Quartile deviation of: 5, 7, 8, 12, 15, 18, 21, 24, 30.</p>
+<div class="steps">
+<div class="step">n = 9. Q1 = (9+1)/4 = 2.5th item → interpolate between 7 and 8 = 7.5; Q3 = 3×2.5 = 7.5th item → between 21 and 24 = 22.5</div>
+<div class="step">Q.D. = (22.5 − 7.5)/2 = 7.5</div>
+</div>
+<div class="final">Final Answer: Q.D. = 7.5</div>
+</div></div>
+<h3>Advantages / Limitations / Applications</h3>
+<div class="grid2">
+<div class="card"><h4 style="margin-top:0">Advantages</h4><ul><li>Simple to calculate; not affected by extreme values.</li><li>Useful for skewed distributions; suitable for open-end distributions.</li></ul></div>
+<div class="card"><h4 style="margin-top:0">Limitations</h4><ul><li>Ignores 50% of observations; less accurate than SD.</li><li>Not suitable for algebraic treatment.</li></ul></div>
+</div>
+<p><b>Applications:</b> Income distribution analysis, business statistics, educational performance analysis, economic studies, financial volatility (middle 50% of returns).</p>
+<h2>4. Practice (Source)</h2>
+<div class="trybox"><span class="th">TRY YOURSELF</span>
+<p>Q1. Find quartile deviation for: 2, 4, 6, 8, 10, 12, 14, 16, 18.</p>
+<button class="revealbtn" data-l="Show Hint" onclick="rev(this)">Show Hint</button><div class="hiddenb hinglish">n=9, Q1 position 2.5th, Q3 position 7.5th.</div>
+<button class="revealbtn" data-l="Show Answer" onclick="rev(this)">Show Answer</button><div class="hiddenb final">Q1 = 5, Q3 = 15 → Q.D. = (15−5)/2 = 5.</div>
+<p>Q2. Calculate coefficient of quartile deviation for Q1 = 20, Q3 = 50.</p>
+<button class="revealbtn" data-l="Show Hint" onclick="rev(this)">Show Hint</button><div class="hiddenb hinglish">Coefficient = (Q3−Q1)/(Q3+Q1).</div>
+<button class="revealbtn" data-l="Show Answer" onclick="rev(this)">Show Answer</button><div class="hiddenb final">(50−20)/(50+20) = 30/70 ≈ 0.43.</div>
+<p>Q3. Find Q.D. of: 5, 9, 12, 15, 18, 22, 25, 28.</p>
+<button class="revealbtn" data-l="Show Hint" onclick="rev(this)">Show Hint</button><div class="hiddenb hinglish">n=8 → Q1 = 2.25th, Q3 = 6.75th, interpolate.</div>
+<button class="revealbtn" data-l="Show Answer" onclick="rev(this)">Show Answer</button><div class="hiddenb final">Q1 ≈ 9.75, Q3 ≈ 22.75 → Q.D. = 6.5 (approx, via interpolation).</div>
+<p class="tocnote">Q1–Q3 <span class="badge b-src">SOURCE QUESTIONS</span> Answers <span class="badge b-gen">GENERATED SOLUTIONS</span></p>
+</div>
+<div class="tip"><b class="lbl">Exam Focus:</b> Range = L−S; QD = (Q3−Q1)/2; quartile positions; coefficient of QD. Theory: merits/demerits of range.</div>
+<button class="markbtn" onclick="markDone('u1range')">✔ Mark Section Complete</button>
+</div>
+
+<div class="pg" id="u1md">
+<h1 class="title">Unit 1 · 1.5 Mean Deviation</h1>
+<p class="sub">Lecture 1.5 <span class="badge b-src">SOURCE CONTENT</span></p>
+<h2>1. Formal Definition &amp; Formula</h2>
+<div class="defbox"><span class="lbl">Formal Definition — Mean Deviation</span><p><b>Mean Deviation</b> of a set of observations is the arithmetic mean of the absolute deviations from the mean (or any other specified value A). Simple series: \(M.D. = \frac{1}{n}\sum |x_i - \bar{x}|\); frequency distribution: \(M.D. = \frac{1}{N}\sum f_i |x_i - \bar{x}|\). 'Mean Deviation' by itself usually refers to M.D. about the mean.</p></div>
+<div class="hinglish"><b class="lbl">Hinglish Explanation:</b> Deviations (xᵢ − A) positive ya negative ho sakte hain, isliye hum absolute values |xᵢ − A| lete hain, unka sum nikalte hain, aur fir unka arithmetic mean — yahi Mean Deviation hai. Usually mean ke about compute karte hain, par median ke about bhi liya ja sakta hai (mixed-concept question!).</div>
+<div class="exbox"><div class="exhead">Example 1 — MD about Median <span class="badge b-src">SOURCE</span></div><div class="exbody">
+<p><b>Problem:</b> Calculate mean deviation about the median: 8, 15, 53, 49, 19, 62, 7, 15, 95, 77.</p>
+<div class="steps">
+<div class="step">Arrange: 7, 8, 15, 15, (19, 49), 53, 62, 77, 95 → n = 10 (even) → Median = (19+49)/2 = 34</div>
+<div class="step">Compute |x − median| for each: 26, 19, 19, 15, 15, 28, 27, 19, 61, 43</div>
+<div class="step">Sum = 272 → M.D. = 272/10 = 27.2</div>
+</div>
+<div class="final">Final Answer: Mean Deviation about median = 27.2</div>
+<p class="tip"><b class="lbl">Exam Tip:</b> Mixed concept — pehle median, phir deviation table. Table banao — marks table ke liye milte hain.</p>
+</div></div>
+<div class="exbox"><div class="exhead">Example 2 — MD for Frequency Distribution <span class="badge b-src">SOURCE</span></div><div class="exbody">
+<p><b>Problem:</b> X: 10,11,12,13,14 with frequencies f: 3,12,18,12,3 (total 48).</p>
+<table class="tbl">
+<tr><th>x</th><th>f</th><th>fx</th><th>|x − x̅|</th><th>f|x − x̅|</th></tr>
+<tr><td>10</td><td>3</td><td>30</td><td>2</td><td>6</td></tr>
+<tr><td>11</td><td>12</td><td>132</td><td>1</td><td>12</td></tr>
+<tr><td>12</td><td>18</td><td>216</td><td>0</td><td>0</td></tr>
+<tr><td>13</td><td>12</td><td>156</td><td>1</td><td>12</td></tr>
+<tr><td>14</td><td>3</td><td>42</td><td>2</td><td>6</td></tr>
+<tr><td>Total</td><td>48</td><td>576</td><td>—</td><td>36</td></tr>
+</table>
+<div class="steps">
+<div class="step">x̅ = ∑fx/N = 576/48 = 12</div>
+<div class="step">M.D. = ∑f|x−x̅|/N = 36/48 = 0.75</div>
+</div>
+<div class="final">Final Answer: Mean = 12, Mean Deviation = 0.75</div>
+</div></div>
+<div class="tip"><b class="lbl">Exam Focus:</b> MD ka formula extreme values se less sensitive hai (absolute deviations), isliye symmetric data pe MD aur SD roughly comparable aate hain.</div>
+<button class="markbtn" onclick="markDone('u1md')">✔ Mark Section Complete</button>
+</div>
+
+<div class="pg" id="u1sd">
+<h1 class="title">Unit 1 · Standard Deviation, Variance &amp; Coefficient of Variation</h1>
+<p class="sub">Lecture 1.5 + 1.7 + slide deck <span class="badge b-src">SOURCE CONTENT</span></p>
+<h2>1. Standard Deviation</h2>
+<div class="defbox"><span class="lbl">Formal Definition — Standard Deviation</span><p><b>Standard Deviation</b> is the positive square-root of the arithmetic mean of the squares of the deviations of the given observations from their arithmetic mean. Denoted by s (sample) or σ (population): \(s = \sqrt{\frac{1}{n}\sum(x_i-\bar{x})^2}\) (raw), \(s = \sqrt{\frac{1}{N}\sum f_i(x_i-\bar{x})^2}\) (grouped).</p></div>
+<div class="hinglish"><b class="lbl">Hinglish Explanation:</b> SD basically deviations ka square karke unka mean leta hai, fir uska positive square root. Squaring ka matlab: positive/negative cancel nahi hote, aur extreme values ko zyada weight milta hai. SD poore observations se based hai isliye sabse important measure of dispersion hai.</div>
+<h3>Variance &amp; Coefficient of Variation</h3>
+<div class="defbox"><span class="lbl">Formal Definition — Variance</span><p>The square of the standard deviation is called <b>variance</b>: variance = (SD)².</p></div>
+<div class="defbox"><span class="lbl">Formal Definition — Coefficient of Variation</span><p>The <b>Coefficient of Variation (C.V.)</b> is a relative measure of dispersion obtained by dividing the standard deviation by the mean and expressing it as a percentage: \(C.V. = \frac{\sigma}{\bar{x}} \times 100\). Higher C.V. → more variable/less stable; lower C.V. → more consistent.</p></div>
+<div class="hinglish"><b class="lbl">Why CV?</b> SD units mein hota hai (cm, kg etc.), isliye alag units wali series compare karne ke liye CV (relative measure, %) use karte hain. Jiska CV zyada → wo series less consistent. Exam favorite!</div>
+
+<div class="exbox"><div class="exhead">Example 1 — Sum of Squares from SD <span class="badge b-src">SOURCE</span></div><div class="exbody">
+<p><b>Problem:</b> SD from 32 observations = 5; sum of observations = 80. Find sum of squares ∑x².</p>
+<div class="steps">
+<div class="step">σ² = ∑x²/n − (∑x/n)² → 25 = ∑x²/32 − (80/32)²</div>
+<div class="step">25 = ∑x²/32 − 6.25 → ∑x² = 32 × 31.25 = 1000</div>
+</div>
+<div class="final">Final Answer: ∑x² = 1000</div></div></div>
+
+<div class="exbox"><div class="exhead">Example 2 — SD of Grouped Data (Step-Deviation) <span class="badge b-src">SOURCE</span></div><div class="exbody">
+<p><b>Problem:</b> Seed yield of 50 sesamum plants. Find SD.</p>
+<table class="tbl">
+<tr><th>Class</th><th>f</th><th>Mid x</th><th>d=(x−A)/C, A=5,C=1</th><th>fd</th><th>fd²</th></tr>
+<tr><td>2.5–3.5</td><td>4</td><td>3</td><td>−2</td><td>−8</td><td>16</td></tr>
+<tr><td>3.5–4.5</td><td>6</td><td>4</td><td>−1</td><td>−6</td><td>6</td></tr>
+<tr><td>4.5–5.5</td><td>15</td><td>5</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>5.5–6.5</td><td>15</td><td>6</td><td>1</td><td>15</td><td>15</td></tr>
+<tr><td>6.5–7.5</td><td>10</td><td>7</td><td>2</td><td>20</td><td>40</td></tr>
+<tr><td>Total</td><td>50</td><td>—</td><td>—</td><td>21</td><td>77</td></tr>
+</table>
+<div class="steps">
+<div class="step">Formula: \(s = C \times \sqrt{\frac{\sum f d^2}{N} - ( \frac{\sum f d}{N} )^2}\)</div>
+<div class="step">\(s = \sqrt{77/50 - (21/50)^2} = \sqrt{1.54 - 0.1764} = \sqrt{1.3636}\)</div>
+</div>
+<div class="final">Final Answer: s = 1.1677</div></div></div>
+
+<div class="exbox"><div class="exhead">Example 3 — CV Comparison <span class="badge b-src">SOURCE</span></div><div class="exbody">
+<p><b>Problem:</b> Yield: mean 50 kg, SD 10 kg; Plant height: mean 55 cm, SD 5 cm. Compare variability.</p>
+<div class="steps">
+<div class="step">CV(yield) = 10/50 × 100 = 20%</div>
+<div class="step">CV(height) = 5/55 × 100 = 9.1%</div>
+</div>
+<div class="final">Final Answer: Yield (20%) more variable than plant height (9.1%) — CV enables cross-unit comparison.</div></div></div>
+
+<h3>Merits &amp; Demerits of SD</h3>
+<div class="grid2"><div class="card"><h4 style="margin-top:0">Merits</h4><ul><li>Rigidly defined; definite value; based on all observations with actual signs.</li><li>Most important &amp; widely used; amenable to further algebraic treatment.</li><li>Stable under sampling fluctuations; basis of correlation &amp; sampling theory.</li></ul></div>
+<div class="card"><h4 style="margin-top:0">Demerits</h4><ul><li>Not easy to understand; difficult to calculate.</li><li>More weight to extreme values (squaring).</li><li>Absolute measure — cannot compare different-unit series (use C.V. instead).</li></ul></div></div>
+
+<h2>2. Population vs Sample (Slide Deck)</h2>
+<div class="hinglish"><b class="lbl">Hinglish:</b> Population variance mein denominator N hota hai (poori group), sample variance mein N−1 (bias correct karne ke liye, unbiased estimator). Formula: σ² = ∑(x−μ)²/N; s² = ∑(x−x̄)²/(N−1). Exam mein pehle decide karo — population ya sample.</div>
+<div class="exbox"><div class="exhead">Example 4 — Sample Variance &amp; SD <span class="badge b-src">SOURCE</span></div><div class="exbody">
+<p><b>Problem:</b> Sample values: 10, 12, 14, 16, 18. Variance and SD?</p>
+<div class="steps">
+<div class="step">Mean = 70/5 = 14; deviations: −4, −2, 0, 2, 4</div>
+<div class="step">Squared: 16, 4, 0, 4, 16 → sum = 40</div>
+<div class="step">Sample variance = 40/(5−1) = 10; SD = √10 ≈ 3.16</div>
+</div>
+<div class="final">Final Answer: s² = 10, s ≈ 3.16 units.</div></div></div>
+
+<h2>3. Combined Variance (Slide Deck)</h2>
+<div class="formula">Combined Variance = \(\frac{\sum n_i(\sigma_i^2 + d_i^2)}{N}\), where \(d_i = \bar{X}_i - \bar{X}_c\) (group mean − combined mean). Includes within-group variance + between-group spread.</div>
+<h2>4. Common Pitfalls to Avoid</h2>
+<ul><li>Forgetting to square deviations before summing.</li><li>Using N instead of N−1 for sample variance.</li><li>Incorrect mean before deviations.</li><li>Confusing SD with variance.</li><li>Rounding intermediate values too early.</li></ul>
+<div class="trybox"><span class="th">TRY YOURSELF</span>
+<p>Q. Two factories A and B measured on same metric. Mean_A=65, SD_A=8; Mean_B=70, SD_B=6. Which factory is more consistent?</p>
+<button class="revealbtn" data-l="Show Hint" onclick="rev(this)">Show Hint</button><div class="hiddenb hinglish">Consistency CV se check hoti hai — kam CV = zyada consistent.</div>
+<button class="revealbtn" data-l="Show Answer" onclick="rev(this)">Show Answer</button><div class="hiddenb final">CV_A = 8/65 × 100 ≈ 12.3%; CV_B = 6/70 × 100 ≈ 8.6% → Factory B more consistent.</div>
+</div>
+<div class="tip"><b class="lbl">Exam Focus:</b> σ² = ∑x²/n − x̄² form (reverse problems), step-deviation table for grouped SD, CV comparisons, and merits/demerits — all high-yield.</div>
+<button class="markbtn" onclick="markDone('u1sd')">✔ Mark Section Complete</button>
+</div>
+<div class="pg" id="u2moments">
+<h1 class="title">Unit 2 · Moments</h1>
+<p class="sub">Lecture 2.1 <span class="badge b-src">SOURCE CONTENT</span></p>
+<h2>1. Introduction (Hinglish)</h2>
+<div class="hinglish"><b class="lbl">Concept:</b> Moments distribution ki characteristics describe karte hain — tendency (mean), variation (variance), skewness aur kurtosis, sab moments se derive hote hain. "Moment" word mechanics se aaya hai. Statistics mein moments = deviations ki powers (1st, 2nd, 3rd …) ka arithmetic mean, deviations ya toh mean se ya arbitrary point A se liye jaate hain. Four moments (μ₁..μ₄) usually calculate kiye jaate hain. Raw moments = arbitrary point A ke about; agar A=0 → moments about origin; agar A = mean → central moments. μ₀ = 1, μ₁(mean) = 0, μ₂(mean) = variance σ².</div>
+<div class="formula"><b>Raw moment about arbitrary point A (grouped)</b>: \(\mu^{\prime}_r = \frac{1}{N}\sum f_i(x_i-A)^r\); ungrouped: \(\frac{1}{n}\sum(x_i-A)^r\)</div>
+<div class="formula"><b>Short-cut (change of scale)</b>: if \(d_i = (x_i - A)/h\), then \(\mu^{\prime}_r = h^r \cdot \frac{\sum f_i d_i^r}{N}\)</div>
+<div class="formula"><b>Moment about origin (A = 0)</b>: \(\mu^{\prime}_r = \frac{1}{N}\sum f_i x_i^r\); first origin moment = mean x̄</div>
+<div class="formula"><b>Central moment (about mean)</b>: \(\mu_r = \frac{1}{N}\sum f_i (x_i - \bar{x})^r\)</div>
+<h2>2. Key Results (Exam must-know)</h2>
+<ul>
+<li>\(\mu_0 = 1\), \(\mu_1 = 0\), \(\mu_2 = \sigma^2\) — "found very important in statistical theory and practice."</li>
+<li>First raw moment about origin = mean; first central moment = 0.</li>
+<li>Second raw &amp; central moments = mean-square deviation &amp; variance respectively.</li>
+<li>Third &amp; fourth moments feed skewness and kurtosis.</li>
+<li>Change of origin does NOT affect central moments; change of scale multiplies r-th moment by \(h^r\).</li>
+</ul>
+<div class="exbox"><div class="exhead">Example — Moments of Marks Distribution (full table) <span class="badge b-src">SOURCE</span></div><div class="exbody">
+<p><b>Problem:</b> Marks: 5,10,15,20,25,30,35 with frequencies 4,10,20,36,16,12,2 (from Lecture 2.2). With d = (x−20)/5:</p>
+<table class="tbl">
+<tr><th>Marks</th><th>f</th><th>d</th><th>fd</th><th>fd²</th><th>fd³</th><th>fd⁴</th></tr>
+<tr><td>5</td><td>4</td><td>−3</td><td>−12</td><td>36</td><td>−108</td><td>324</td></tr>
+<tr><td>10</td><td>10</td><td>−2</td><td>−20</td><td>40</td><td>−80</td><td>160</td></tr>
+<tr><td>15</td><td>20</td><td>−1</td><td>−20</td><td>20</td><td>−20</td><td>20</td></tr>
+<tr><td>20</td><td>36</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>25</td><td>16</td><td>1</td><td>16</td><td>16</td><td>16</td><td>16</td></tr>
+<tr><td>30</td><td>12</td><td>2</td><td>24</td><td>48</td><td>96</td><td>192</td></tr>
+<tr><td>35</td><td>2</td><td>3</td><td>6</td><td>18</td><td>54</td><td>162</td></tr>
+<tr><td>Total</td><td>100</td><td></td><td>−6</td><td>178</td><td>−42</td><td>874</td></tr>
+</table>
+<div class="steps">
+<div class="step">μ′₁ = (−6/100)×5 = −0.3</div>
+<div class="step">μ′₂ = (178/100)×25 = 44.5</div>
+<div class="step">μ′₃ = (−42/100)×125 = −52.5</div>
+<div class="step">μ′₄ = (874/100)×625 = 5462.5</div>
+</div>
+<div class="final">Raw moments about A=20: μ′₁=−0.3, μ′₂=44.5, μ′₃=−52.5, μ′₄=5462.5 (used further in Moment Relations section).</div>
+</div></div>
+<div class="tip"><b class="lbl">Exam Focus:</b> Formulas for moments about arbitrary point/origin/mean + μ₁=0, μ₂=σ² results + column-wise table method.</div>
+<button class="markbtn" onclick="markDone('u2moments')">✔ Mark Section Complete</button>
+</div>
+
+<div class="pg" id="u2momrel">
+<h1 class="title">Unit 2 · Moment Relations &amp; Pearson β, γ Coefficients</h1>
+<p class="sub">Lecture 2.2 <span class="badge b-src">SOURCE CONTENT</span></p>
+<h2>1. Relation Between Central &amp; Arbitrary-Point Moments</h2>
+<div class="hinglish"><b class="lbl">Hinglish:</b> Jab actual mean fraction mein aata hai, hum deviations arbitrary point A se lete hain (raw moments), aur phir central moments (mean ke about) mein convert karte hain. Derivation mein xᵢ − x̄ = (xᵢ − A) − (x̄ − A) likh ke binomial expansion karte hain, aur μ′₁ = x̄ − A milta hai. Conversion formulas neeche hain — ye exam ke liye sabse important derivation hai.</div>
+<div class="formula">\(\mu_2 = \mu^{\prime}_2 - {\mu^{\prime}}^2_1\)</div>
+<div class="formula">\(\mu_3 = \mu^{\prime}_3 - 3\mu^{\prime}_1\mu^{\prime}_2 + 2{\mu^{\prime}}^3_1\)</div>
+<div class="formula">\(\mu_4 = \mu^{\prime}_4 - 4\mu^{\prime}_1\mu^{\prime}_3 + 6{\mu^{\prime}}^2_1\mu^{\prime}_2 - 3{\mu^{\prime}}^4_1\)</div>
+<h2>2. Effect of Change of Origin &amp; Scale</h2>
+<p>If \(u_i = (x_i - A)/h\): then \(\mu^{\prime}_r(x) = h^r \mu^{\prime}_r(u)\) (arbitrary point) and \(\mu_r(x) = h^r \mu_r(u)\) (central). <b>Origin change affects nothing in central moments; scale multiplies by hʳ.</b></p>
+<h2>3. Sheppard's Corrections for Grouped Data</h2>
+<p>Grouping assumes frequencies uniformly distributed about midpoints — valid for symmetric data, but for highly skewed data or intervals &gt; 1/20th of range, W. F. Sheppard's corrections apply (frequency tapers to zero both sides, h = class width):</p>
+<div class="formula">\(\mu_2^{corrected} = \mu_2 - \frac{h^2}{12}\)
+\(\mu_4^{corrected} = \mu_4 - \frac{h^2}{12}\mu_2 + \frac{7h^4}{240}\) (μ₃ unchanged)</div>
+<h2>4. Pearson's Beta &amp; Gamma Coefficients</h2>
+<div class="formula">\(\beta_1 = \frac{\mu_3^2}{\mu_2^3}\) (skewness) \(\gamma_1 = \pm\sqrt{\beta_1} = \frac{\mu_3}{\sigma^{3}}\) (sign from μ₃)</div>
+<div class="formula">\(\beta_2 = \frac{\mu_4}{\mu_2^2}\) (kurtosis) \(\gamma_2 = \beta_2 - 3\)</div>
+<div class="hinglish"><b class="lbl">Hinglish:</b> β₁ hamesha positive aata hai kyunki μ₃ square ho jaata hai — direction (positive/negative skew) nahi batata. Isliye γ₁ = √β₁ use karte hain jiska sign μ₃ se aata hai. Kurtosis ke liye β₂ = μ₄/μ₂², aur γ₂ = β₂ − 3 (normal curve ke 3 se compare karne ke liye).</div>
+
+<div class="exbox"><div class="exhead">Example 1 — Full Moments→β1,β2,γ1,γ2 <span class="badge b-src">SOURCE</span></div><div class="exbody">
+<p><b>Problem (Lecture 2.2, Example 1):</b> Compute central moments, β₁, β₂, γ₁, γ₂ for the marks distribution (from table in Moments section): μ′₁=−0.3, μ′₂=44.5, μ′₃=−52.5, μ′₄=5462.5.</p>
+<div class="steps">
+<div class="step">Central moments: μ₂ = 44.5 − (−0.3)² = 44.41 = σ²</div>
+<div class="step">μ₃ = −52.5 − 3(−0.3)(44.5) + 2(−0.3)³ = −12.504</div>
+<div class="step">μ₄ = 5462.5 − 4(−0.3)(−52.5) + 6(0.09)(44.5) − 3(0.3)⁴ = 5423.5057</div>
+<div class="step">β₁ = μ₃²/μ₂³ = (−12.504)²/(44.41)³ = 0.001785</div>
+<div class="step">γ₁ = −12.504/(6.6641)³ = −0.0422 (σ = √44.41 = 6.6641)</div>
+<div class="step">β₂ = μ₄/μ₂² = 5423.5057/(44.41)² = 2.7499; γ₂ = β₂ − 3 = −0.2501</div>
+</div>
+<div class="final">Final Answer: μ₂=44.41, μ₃=−12.504, μ₄=5423.51; β₁=0.0018, γ₁=−0.0422, β₂=2.7499, γ₂=−0.2501 (platykurtic).</div>
+<p class="tip"><b class="lbl">Exam Tip:</b> Purana table reuse karo — examiner full-multi-step question deta hai isi structure ka.</p>
+</div></div>
+
+<h2>5. Practice (Source)</h2>
+<div class="trybox"><span class="th">TRY YOURSELF</span>
+<p>Q1. First four moments of a distribution about the value 5 are 1, 10, 20, 25. Find central moments, β₁ and β₂.</p>
+<button class="revealbtn" data-l="Show Hint" onclick="rev(this)">Show Hint</button><div class="hiddenb hinglish">Conversion formulas lagao: μ₂=μ′₂−μ′₁², etc.</div>
+<button class="revealbtn" data-l="Show Answer" onclick="rev(this)">Show Answer</button><div class="hiddenb final">μ₂=20−1=19; μ₃=25−3·1·20+2·1=−33? Check: μ₃ = μ′₃ − 3μ′₁μ′₂ + 2μ′₁³ = 25−60+2=−33; μ₄ = μ′₄ −4μ′₁μ′₃ +6μ′₁²μ′₂ −3μ′₁⁴ = 25−100+120−3 = 42. Then β₁ = μ₃²/μ₂³ = 1089/6859 ≈ 0.159; β₂ = μ₄/μ₂² = 42/361 ≈ 0.116.</div>
+<p class="tocnote">Q1 <span class="badge b-src">SOURCE QUESTION</span> Answer <span class="badge b-gen">GENERATED SOLUTION</span></p>
+<p>Q2 (from Lecture 2.4): First four raw moments of a distribution are 2, 136, 320, and 40,000. Find coefficients of skewness and kurtosis.</p>
+<button class="revealbtn" data-l="Show Hint" onclick="rev(this)">Show Hint</button><div class="hiddenb hinglish">Same conversion route: pehle central moments, phir β₁, β₂.</div>
+<button class="revealbtn" data-l="Show Solution" onclick="rev(this)">Show Solution</button><div class="hiddenb final">[QUESTION INCOMPLETE IN SOURCE route ambiguity — treat 2,136,320,40000 as raw moments μ′₁..μ′₄.] μ₂ = 136 − 4 = 132; μ₃ = 320 − 3·2·136 + 2·8 = 320−816+16 = −480; μ₄ = 40000 − 4·2·320 + 6·4·136 − 3·16 = 40000−2560+3264−48 = 40656. β₁ = μ₃²/μ₂³ ≈ (−480)²/(132)³ = 230400/2299968 ≈ 0.1002; β₂ = μ₄/μ₂² = 40656/17424 ≈ 2.333 → platykurtic.</div>
+</div>
+<div class="tip"><b class="lbl">Exam Focus:</b> Conversion formulas μ₂,μ₃,μ₄ (learn by heart), Sheppard corrections, β/γ definitions — theory + numerical dono mein aate hain.</div>
+<button class="markbtn" onclick="markDone('u2momrel')">✔ Mark Section Complete</button>
+</div>
+
+<div class="pg" id="u2skew">
+<h1 class="title">Unit 2 · Skewness — Karl Pearson &amp; Bowley Methods</h1>
+<p class="sub">Lecture 2.3 + 1.3.2 <span class="badge b-src">SOURCE CONTENT</span></p>
+<h2>1. Concept (Hinglish + Definition)</h2>
+<div class="defbox"><span class="lbl">Formal Definition — Skewness</span><p><b>Skewness</b> means lack of symmetry. A distribution is symmetric if mean, median and mode coincide; otherwise asymmetric. If the right tail is longer → positively skewed (mean &gt; median &gt; mode); if the left tail is longer → negatively skewed (mean &lt; median &lt; mode).</p></div>
+<div class="hinglish"><b class="lbl">Hinglish:</b> Symmetric matlab mirror-image — center se dono sides same. Skewed data mein mean tail ki taraf shift ho jaata hai. Positive skew: mean &gt; median &gt; mode (right tail long, e.g. income data). Negative skew: mean &lt; median &lt; mode. Variance amount batata hai, skewness direction — dono alag cheezein hain.</div>
+<h2>2. Good Measure of Skewness — 3 Criteria</h2>
+<ol><li>Unit-free number (comparable across units)</li><li>Zero for symmetric; ± sign shows direction</li><li>Value moves from extreme negative to extreme positive smoothly</li></ol>
+<h3>Absolute Measures (never use for comparison)</h3>
+<div class="formula">Sₖ = Mean − Median · Sₖ = Mean − Mode · Sₖ = (Q₃ − Q₂) − (Q₂ − Q₁)</div>
+<div class="hinglish"><b class="lbl">Hinglish:</b> Absolute measures same skewness ko chhote/bade variation wali distribution mein different meaning dete hain — isliye comparison ke liye <b>relative</b> measures (coefficients) use hote hain, jo pure numbers hote hain.</div>
+<h2>3. Karl Pearson's Coefficient of Skewness</h2>
+<div class="formula">\(S_k = \frac{Mean - Mode}{\sigma}\). If mode not well-defined: use Mode = 3·Median − 2·Mean → \(S_k = \frac{3(Mean - Median)}{\sigma}\). Zero = symmetric; positive if mean &gt; mode. Usually between ±1 for moderately skewed; −3 &lt; Sₖ &lt; 3.</div>
+<h2>4. Bowley's Coefficient of Skewness (quartile-based)</h2>
+<div class="formula">\(S_k = \frac{(Q_3 - Q_2) - (Q_2 - Q_1)}{Q_3 - Q_1} = \frac{Q_3 + Q_1 - 2Q_2}{Q_3 - Q_1}\). Value between +1 and −1.</div>
+<div class="exbox"><div class="exhead">Example 1 — Pearson Reverse Problem <span class="badge b-src">SOURCE</span></div><div class="exbody">
+<p><b>Problem:</b> Pearson's coefficient of skewness Sₖ = 0.64, σ = 13, Mean = 59.2. Find mode and median.</p>
+<div class="steps">
+<div class="step">Sₖ = (Mean − Mode)/σ → Mode = Mean − Sₖ·σ = 59.2 − 0.64×13 = 59.2 − 8.32 = 50.88</div>
+<div class="step">Mode = 3·Median − 2·Mean → Median = (Mode + 2·Mean)/3 = (50.88 + 118.4)/3 = 169.28/3 ≈ 56.43</div>
+</div>
+<div class="final">Final Answer: Mode ≈ 50.88, Median ≈ 56.43</div></div></div>
+<h2>5. Interpreting Skewness Values (Slide Deck)</h2>
+<ul><li>0 → perfectly symmetric; ±0.5 range → approximately symmetric</li><li>|value| &gt; 0.5 → moderate; |value| &gt; 1 → highly skewed</li><li>Magnitude = degree of asymmetry; sign = direction</li></ul>
+<h2>6. Practice (Source)</h2>
+<div class="trybox"><span class="th">TRY YOURSELF</span>
+<p>Q1. Pearson's coefficient of skewness is 1.28, mean = 164, mode = 100. Find SD.</p>
+<button class="revealbtn" data-l="Show Hint" onclick="rev(this)">Show Hint</button><div class="hiddenb hinglish">Sₖ = (Mean − Mode)/σ → σ = (Mean − Mode)/Sₖ.</div>
+<button class="revealbtn" data-l="Show Answer" onclick="rev(this)">Show Answer</button><div class="hiddenb final">σ = (164 − 100)/1.28 = 64/1.28 = 50.</div>
+<p>Q2. Bowley's coefficient of skewness = 1.2, Q₁ + Q₃ = 200, Median = 76. Find Q₃.</p>
+<button class="revealbtn" data-l="Show Hint" onclick="rev(this)">Show Hint</button><div class="hiddenb hinglish">Sₖ = (Q₃+Q₁−2Q₂)/(Q₃−Q₁) lagao, Q₁ = 200 − Q₃ substitute karo.</div>
+<button class="revealbtn" data-l="Show Answer" onclick="rev(this)">Show Answer</button><div class="hiddenb final">1.2 = (200 − 152)/(Q₃ − (200−Q₃)) = 48/(2Q₃−200) ⇒ 2Q₃ − 200 = 40 ⇒ Q₃ = 120.</div>
+<p>Q3. Marks of 150 students → calculate Pearson's coefficient of skewness (data in source table).</p>
+<p class="tocnote">Q1–Q3 <span class="badge b-src">SOURCE QUESTIONS</span> Answers <span class="badge b-gen">GENERATED SOLUTIONS</span></p>
+</div>
+<div class="tip"><b class="lbl">Exam Focus:</b> Pearson vs Bowley formulas, reverse problems (find σ/mode/median from Sₖ), interpretation thresholds.</div>
+<button class="markbtn" onclick="markDone('u2skew')">✔ Mark Section Complete</button>
+</div>
+
+<div class="pg" id="u2kurt">
+<h1 class="title">Unit 2 · Kurtosis &amp; Nature of Distribution</h1>
+<p class="sub">Lecture 2.4 + slide deck <span class="badge b-src">SOURCE CONTENT</span></p>
+<h2>1. Concept</h2>
+<div class="defbox"><span class="lbl">Formal Definition — Kurtosis</span><p><b>Kurtosis</b> gives a measure of the flatness/peakedness ("convexity", per Karl Pearson) of a distribution, relative to the normal curve. Measured by \(\beta_2 = \mu_4/\mu_2^2\); curves more peaked than normal are <b>leptokurtic</b> (β₂&gt;3), flatter are <b>platykurtic</b> (β₂&lt;3), and the normal curve is <b>mesokurtic</b> (β₂=3). Excess kurtosis γ₂ = β₂ − 3.</p></div>
+<div class="hinglish"><b class="lbl">Hinglish:</b> Central tendency + dispersion + skewness milke bhi distribution ka complete idea nahi dete — humein shape (peakedness/tailedness) bhi chahiye. Wahi kurtosis hai. High kurtosis = heavy tails + sharp peak (outliers zyada), low kurtosis = light tails + flat peak. Note: kurtosis ≠ skewness — asymmetry nahi measure karta.</div>
+<h2>2. Classification</h2>
+<table class="tbl">
+<tr><th>Type</th><th>β₂</th><th>γ₂ (excess)</th><th>Meaning</th></tr>
+<tr><td>Leptokurtic</td><td>&gt; 3</td><td>&gt; 0</td><td style="text-align:left">Sharp peak, heavy tails (Greek 'leptos' = thin/sharp)</td></tr>
+<tr><td>Mesokurtic</td><td>= 3</td><td>= 0</td><td style="text-align:left">Normal shape, baseline (Greek 'mesos' = middle)</td></tr>
+<tr><td>Platykurtic</td><td>&lt; 3</td><td>&lt; 0</td><td style="text-align:left">Flat peak, light tails (Greek 'platys' = broad/flat)</td></tr>
+</table>
+<div class="exbox"><div class="exhead">Example 1 — Skewness &amp; Kurtosis from Moments <span class="badge b-src">SOURCE</span></div><div class="exbody">
+<p><b>Problem (Lecture 2.4, Example 2):</b> First four central moments: 0, 2.5, 0.7, 18.75. Find skewness and kurtosis.</p>
+<div class="steps">
+<div class="step">Skewness β₁ = μ₃²/μ₂³ = (0.7)²/(2.5)³ = 0.49/15.625 = 0.031</div>
+<div class="step">Kurtosis β₂ = μ₄/μ₂² = 18.75/(2.5)² = 18.75/6.25 = 3</div>
+</div>
+<div class="final">Final Answer: β₁ = 0.031 (nearly symmetric); β₂ = 3 → curve is mesokurtic.</div></div></div>
+<div class="exbox"><div class="exhead">Example 2 — Numeric Kurtosis <span class="badge b-src">SOURCE</span></div><div class="exbody">
+<p><b>Problem (slide deck):</b> μ₄ = 128, σ = 2. Kurtosis?</p>
+<div class="steps"><div class="step">β₂ = μ₄/σ⁴ = 128/2⁴ = 128/16 = 8</div><div class="step">Excess = 8 − 3 = 5 &gt; 0</div></div>
+<div class="final">Final Answer: β₂ = 8, excess = 5 → leptokurtic.</div></div></div>
+<h2>3. Common Pitfalls in Kurtosis (Slide Deck)</h2>
+<ul>
+<li>Do not confuse kurtosis with skewness (asymmetry).</li>
+<li>Kurtosis does not measure the height of the peak alone — flat peak can still have high kurtosis if tails are heavy.</li>
+<li>Sample kurtosis unstable with small samples.</li>
+<li>Check outliers before computing kurtosis on raw data.</li>
+<li>Misreading excess kurtosis (β₂−3) as raw kurtosis — a common error.</li>
+</ul>
+<h2>4. Practice (Source)</h2>
+<div class="trybox"><span class="th">TRY YOURSELF</span>
+<p>Q1. First four raw moments are 2, 136, 320, 40,000. Find skewness and kurtosis coefficients.</p>
+<button class="revealbtn" data-l="Show Hint" onclick="rev(this)">Show Hint</button><div class="hiddenb hinglish">Raw→central conversion formulas se pehle μ₂,μ₃,μ₄ nikalo, phir β₁=μ₃²/μ₂³, β₂=μ₄/μ₂².</div>
+<button class="revealbtn" data-l="Show Answer" onclick="rev(this)">Show Answer</button><div class="hiddenb final">See Moment Relations section (this source question solved there): β₁ ≈ 0.1002, β₂ ≈ 2.333 → platykurtic.</div>
+<p>Q2. Classification practice: If β₂ = 4.2, which type? Below tells answer.</p>
+<button class="revealbtn" data-l="Show Hint" onclick="rev(this)">Show Hint</button><div class="hiddenb hinglish">3 se compare karo.</div>
+<button class="revealbtn" data-l="Show Answer" onclick="rev(this)">Show Answer</button><div class="hiddenb final">4.2 &gt; 3 → Leptokurtic.</div>
+</div>
+<div class="tip"><b class="lbl">Exam Focus:</b> β₂ = μ₄/μ₂², γ₂ = β₂ − 3, three classifications, and "why subtract 3" (normal baseline) — guaranteed theory marks.</div>
+<button class="markbtn" onclick="markDone('u2kurt')">✔ Mark Section Complete</button>
+</div>
+<div class="pg" id="u3prob">
+<h1 class="title">Unit 3 · Basics of Probability — Definitions and Laws</h1>
+<p class="sub">Lecture 3.1 <span class="badge b-src">SOURCE CONTENT</span></p>
+<h2>1. Core Definitions (Exam-ready)</h2>
+<div class="defbox"><span class="lbl">Random Experiment</span><p>A <b>random experiment</b> is an experiment whose outcome cannot be predicted with certainty in advance (e.g. tossing a coin, rolling a die, drawing a card).</p></div>
+<div class="defbox"><span class="lbl">Outcome &amp; Sample Space</span><p>An <b>outcome</b> is a possible result of a random experiment. The set of all possible outcomes is the <b>sample space S</b> (e.g. coin → S={H,T}; die → S={1,…,6}; two coins → S={HH,HT,TH,TT}).</p></div>
+<div class="defbox"><span class="lbl">Event</span><p>An <b>event</b> is a subset of the sample space, denoted by capital letters A, B, C (e.g. A = even number = {2,4,6}).</p></div>
+<div class="defbox"><span class="lbl">Types of Events</span><p><b>Simple/elementary:</b> one outcome {2}. <b>Compound:</b> more than one outcome. <b>Impossible:</b> P(A)=0 (e.g. 7 on a die). <b>Sure:</b> P(S)=1. <b>Complementary:</b> A′ = S − A (e.g. A={2,4,6} → A′={1,3,5}).</p></div>
+<div class="defbox"><span class="lbl">Classical Definition of Probability</span><p>If an experiment has n equally likely outcomes and m favorable outcomes for event A, then \(P(A) = \frac{m}{n}\), with 0 ≤ P(A) ≤ 1.</p></div>
+<div class="hinglish"><b class="lbl">Hinglish:</b> Probability basically uncertainty ko 0 se 1 ke beech number mein measure karta hai — 0 = impossible, 1 = sure. Classical definition ka logic simple hai: favorable/total. Applications: weather forecasting, insurance/risk, medical diagnosis, ML/AI, engineering reliability.</div>
+<h2>2. Laws of Probability</h2>
+<div class="formula"><b>(A) Addition Law</b>: \(P(A \cup B) = P(A) + P(B) - P(A \cap B)\). Mutually exclusive (can't occur together): P(A∩B)=0 → P(A∪B) = P(A)+P(B).</div>
+<div class="formula"><b>(B) Complement Law</b>: \(P(A') = 1 - P(A)\).</div>
+<div class="formula"><b>(C) Multiplication Law</b>: \(P(A \cap B) = P(A) \times P(B|A)\). Independent events: \(P(A \cap B) = P(A) \times P(B)\).</div>
+<div class="exbox"><div class="exhead">Example 1 — Coin <span class="badge b-src">SOURCE</span></div><div class="exbody">
+<p><b>Problem:</b> Tossing a coin — P(Head)?</p>
+<div class="steps"><div class="step">S = {H,T}, favorable 1, total 2</div></div>
+<div class="final">P(H) = 1/2</div></div></div>
+<div class="exbox"><div class="exhead">Example 2 — Die, Even Number <span class="badge b-src">SOURCE</span></div><div class="exbody">
+<p><b>Problem:</b> Rolling a die — P(even)?</p>
+<div class="steps"><div class="step">S = {1..6}; A = {2,4,6} → 3/6</div></div>
+<div class="final">P(A) = 1/2</div></div></div>
+<div class="exbox"><div class="exhead">Example 3 — Addition Law <span class="badge b-src">SOURCE</span></div><div class="exbody">
+<p><b>Problem:</b> Die rolled; A = even = {2,4,6}, B = greater than 4 = {5,6}. Find P(A∪B).</p>
+<div class="steps">
+<div class="step">A∩B = {6}; P(A)=3/6, P(B)=2/6, P(A∩B)=1/6</div>
+<div class="step">P(A∪B) = 3/6 + 2/6 − 1/6 = 4/6 = 2/3</div>
+</div>
+<div class="final">Final Answer: 2/3</div></div></div>
+<div class="exbox"><div class="exhead">Example 4 — Complement Law <span class="badge b-src">SOURCE</span></div><div class="exbody">
+<p><b>Problem:</b> Probability of passing an exam is 0.8. Probability of failing?</p>
+<div class="steps"><div class="step">P(F) = 1 − 0.8</div></div>
+<div class="final">Final Answer: 0.2</div></div></div>
+<div class="exbox"><div class="exhead">Example 5 — Multiplication Law (Independent) <span class="badge b-src">SOURCE</span></div><div class="exbody">
+<p><b>Problem:</b> Two coins tossed — P(two heads)?</p>
+<div class="steps"><div class="step">P(H)=1/2; independent → P(HH) = 1/2 × 1/2</div></div>
+<div class="final">Final Answer: 1/4</div></div></div>
+<h2>3. How to Recognize the Question (Hinglish)</h2>
+<div class="hinglish">• "at least one of A or B" → <b>Addition law</b>. • "event does NOT happen" → <b>Complement</b>. • "A and B together" + independence → <b>Multiplication</b>. • Agar events mutually exclusive hain ("cannot occur together") → intersection term zero karo.</div>
+<div class="tip"><b class="lbl">Exam Focus:</b> Sample space listing, event types, 3 laws with numericals — foundations for conditional probability.</div>
+<button class="markbtn" onclick="markDone('u3prob')">✔ Mark Section Complete</button>
+</div>
+
+<div class="pg" id="u3cond">
+<h1 class="title">Unit 3 · Conditional Probability &amp; Bayes Theorem</h1>
+<p class="sub">Lecture 3.2 <span class="badge b-src">SOURCE CONTENT</span></p>
+<h2>1. Conditional Probability</h2>
+<div class="defbox"><span class="lbl">Formal Definition</span><p><b>Conditional Probability</b> is the probability of occurrence of event A given that event B has already occurred: \(P(A|B) = \frac{P(A \cap B)}{P(B)}\), where P(B) ≠ 0.</p></div>
+<div class="hinglish"><b class="lbl">Hinglish:</b> Jab ek event B already ho chuka ho, toh sample space effectively B ban jaata hai — us reduced space mein A ka probability. Example: deck se face card aaya — ab king honay ka chance sirf face cards (12) mein dekhenge.</div>
+<div class="exbox"><div class="exhead">Example 1 — King given Face Card <span class="badge b-src">SOURCE</span></div><div class="exbody">
+<p><b>Problem:</b> One card drawn. Probability it is a king given it is a face card?</p>
+<div class="steps"><div class="step">Face cards = 12, Kings = 4</div><div class="step">P(K|F) = 4/12</div></div>
+<div class="final">Final Answer: P(K|F) = 1/3</div></div></div>
+<h2>2. Independent vs Dependent Events</h2>
+<div class="defbox"><span class="lbl">Definitions</span><p><b>Independent events:</b> occurrence of one does not affect the other (e.g. tossing two coins) — condition P(A∩B) = P(A)·P(B). <b>Dependent events:</b> occurrence of one affects the other (e.g. drawing cards without replacement).</p></div>
+<h2>3. Bayes' Theorem</h2>
+<div class="defbox"><span class="lbl">Formal Statement</span><p><b>Bayes' Theorem</b> is used to revise probabilities based on new information: \(P(A|B) = \frac{P(B|A)\,P(A)}{P(B)}\).</p></div>
+<p><b>Applications:</b> Medical testing, spam filtering, machine learning, decision-making.</p>
+<h2>4. Important Probability Identities</h2>
+<div class="formula">P(S) = 1 · P(ϕ) = 0 · 0 ≤ P(A) ≤ 1 · P(A′) = 1 − P(A) · P(A − B) = P(A) − P(A∩B)</div>
+<h2>5. Numerical Problems (Source)</h2>
+<div class="exbox"><div class="exhead">Example 2 — Cards <span class="badge b-src">SOURCE</span></div><div class="exbody">
+<p><b>Problem:</b> A card drawn from 52. P(ace)? P(red card)?</p>
+<div class="steps"><div class="step">P(Ace) = 4/52 = 1/13; P(Red) = 26/52 = 1/2</div></div>
+<div class="final">Final Answer: 1/13 and 1/2.</div></div></div>
+<div class="exbox"><div class="exhead">Example 3 — Two Dice, Sum 7 <span class="badge b-src">SOURCE</span></div><div class="exbody">
+<p><b>Problem:</b> Two dice rolled. P(sum = 7)?</p>
+<div class="steps"><div class="step">Total outcomes 36; favorable (1,6),(2,5),(3,4),(4,3),(5,2),(6,1) = 6</div><div class="step">P = 6/36</div></div>
+<div class="final">Final Answer: 1/6</div></div></div>
+<div class="hinglish"><b class="lbl">Real-Life Applications:</b> Engineering — reliability of machines, failure analysis. Business — market prediction, risk management. Medical — disease prediction, drug testing. AI — prediction algorithms, data analysis.</div>
+<div class="trybox"><span class="th">TRY YOURSELF</span>
+<p>Q. Two cards drawn without replacement. P(second is an ace | first was an ace)?</p>
+<button class="revealbtn" data-l="Show Hint" onclick="rev(this)">Show Hint</button><div class="hiddenb hinglish">Bina replacement ke — dependent events. Remaining aces 3, remaining cards 51.</div>
+<button class="revealbtn" data-l="Show Answer" onclick="rev(this)">Show Answer</button><div class="hiddenb final">P = 3/51 = 1/17.</div>
+</div>
+<div class="tip"><b class="lbl">Exam Focus:</b> P(A|B) = P(A∩B)/P(B), independence check, Bayes formula, identities — all short-numerical territory.</div>
+<button class="markbtn" onclick="markDone('u3cond')">✔ Mark Section Complete</button>
+</div>
+
+<div class="pg" id="u3rv">
+<h1 class="title">Unit 3 · Random Variables, PMF, PDF &amp; Distribution Function</h1>
+<p class="sub">Lecture 3.3 <span class="badge b-src">SOURCE CONTENT</span></p>
+<h2>1. Random Variable</h2>
+<div class="defbox"><span class="lbl">Formal Definition</span><p>A <b>random variable</b> is a real-valued function whose domain is the set of possible outcomes of a random experiment and whose range is a subset of real numbers, satisfying: (I) each value can be assigned some probability; (II) the sum of all probabilities = 1. Notation: capital letters X, Y, Z; r.v. for random variable.</p></div>
+<div class="hinglish"><b class="lbl">Hinglish:</b> Random experiment ke har outcome se ek numerical characteristic attach karte hain — jaise die do baar phenka, X = odd numbers kitni baar aaye (0,1,2). Ab har value pe probability assign ho sakti hai. Discrete RV = countable values (students present); Continuous RV = interval ke saare real values (temperature, race timings).</div>
+<div class="exbox"><div class="exhead">Example 0 — Die Twice, Odd Count <span class="badge b-src">SOURCE</span></div><div class="exbody">
+<div class="steps">
+<div class="step">X = 0 for 9 outcomes, X = 1 for 18, X = 2 for 9 (of 36)</div>
+<div class="step">P(X=0)=9/36=1/4; P(X=1)=18/36=1/2; P(X=2)=1/4; sum = 1 ✓</div>
+</div>
+<div class="final">The distribution {(0,1/4),(1,1/2),(2,1/4)} is a valid probability distribution.</div></div></div>
+<h2>2. Discrete RV &amp; Probability Mass Function (PMF)</h2>
+<div class="defbox"><span class="lbl">PMF</span><p>For a discrete r.v. X taking values x₁, x₂, … with P(X = xᵢ) = p(xᵢ), the function p(xᵢ) is the <b>probability mass function</b> satisfying p(xᵢ) ≥ 0 and \(\sum_i p(x_i) = 1\). The set {(x₁,p(x₁)),…} = probability distribution of X.</p></div>
+<div class="exbox"><div class="exhead">Example 1 — Which Are Valid Distributions? <span class="badge b-src">SOURCE</span></div><div class="exbody">
+<div class="steps">
+<div class="step">(i) P(0)=1/2, P(1)=3/4 → sum = 5/4 &gt; 1 ✗ (invalid)</div>
+<div class="step">(ii) p(1) = −1/4 → negative probability ✗ (invalid)</div>
+<div class="step">(iv) checking the listed probabilities, total ≠ 1 ✗ (invalid)</div>
+</div>
+<div class="final">Final Answers: (i) invalid — total probability exceeds 1; (ii) invalid — negative probability; (iv) invalid — total probability ≠ 1. <span class="badge b-gen">GENERATED WORKING ON SOURCE QUESTION</span></div></div></div>
+<h2>3. Continuous RV &amp; Probability Density Function (PDF)</h2>
+<div class="defbox"><span class="lbl">PDF</span><p>For a continuous r.v. X with function f(x): \(f(x) = \lim_{dx\rightarrow 0} \frac{P[x \le X \le x+dx]}{dx}\), satisfying f(x) ≥ 0 and \(\int_R f(x)\,dx = 1\). The probability over an interval: \(P[a &lt; X &lt; b] = \int_a^b f(x)\,dx\). A continuous r.v. has zero probability of taking any exact single value.</p></div>
+<div class="exbox"><div class="exhead">Example 5 — PDF f(x) = Ax³ <span class="badge b-src">SOURCE</span></div><div class="exbody">
+<p><b>Problem:</b> f(x) = Ax³, 0 ≤ x ≤ 1. Determine (i) A (ii) P(0.2&lt;X&lt;0.5) (iii) P(X&gt;3/4 | X&gt;1/2).</p>
+<div class="steps">
+<div class="step">(i) ∫₀¹ Ax³ dx = A/4 = 1 → A = 4</div>
+<div class="step">(ii) ∫₀.₂⁰.⁵ 4x³ dx = [x⁴]₀.₂⁰.⁵ = 0.0625 − 0.0016 = 0.0609</div>
+<div class="step">(iii) P(X&gt;3/4) = 1 − (3/4)⁴ = 175/256; P(X&gt;1/2) = 1 − (1/2)⁴ = 15/16 → ratio = (175/256)/(15/16) = 35/48</div>
+</div>
+<div class="final">Final Answers: A = 4; 0.0609; 35/48.</div></div></div>
+<h2>4. Distribution Function (CDF)</h2>
+<div class="defbox"><span class="lbl">CDF</span><p>The function F(x) = P[X ≤ x], defined for all real values, is the <b>distribution function</b> (cumulative distribution function) of X. Domain = real numbers, range = [0,1]. For discrete r.v., F(xᵢ) = p₁ + p₂ + … + pᵢ; the last value equals 1. For continuous r.v., \(F(x) = \int_{-\infty}^{x} f(u)\,du\) and \(f(x) = F'(x)\) (dF(x) = probability differential).</p></div>
+<div class="exbox"><div class="exhead">Example 7 — Building the CDF Table <span class="badge b-src">SOURCE</span></div><div class="exbody">
+<p><b>Problem:</b> X: 0..7 with P: 0, 1/10, 1/5, 1/5, 3/10, 1/100, 1/50, 17/100. F(x)?</p>
+<table class="tbl">
+<tr><th>X</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th></tr>
+<tr><td>F(x)</td><td>0</td><td>1/10</td><td>3/10</td><td>1/2</td><td>4/5</td><td>81/100</td><td>83/100</td><td>1</td></tr>
+</table>
+<div class="final">Final Answer: CDF accumulates to 1 at X = 7 (verifies validity).</div></div></div>
+<div class="tip"><b class="lbl">Exam Focus:</b> RV definition, PMF/PDF validity checks (p ≥ 0, sum = 1), CDF accumulation, f = F′.</div>
+<button class="markbtn" onclick="markDone('u3rv')">✔ Mark Section Complete</button>
+</div>
+<div class="pg" id="u3binom">
+<h1 class="title">Unit 3 · Binomial Distribution</h1>
+<p class="sub">Lecture 3.4 <span class="badge b-src">SOURCE CONTENT</span></p>
+<h2>1. Concept</h2>
+<div class="defbox"><span class="lbl">Formal Definition</span><p>The <b>Binomial Distribution</b> (Bernoulli distribution, after James Bernoulli) is a discrete probability distribution expressing the probability of one set of dichotomous alternatives (success/failure) in n independent trials: \(P(r) = {^nC_r}\,p^r q^{n-r} = \frac{n!}{r!(n-r)!}p^r q^{n-r}\), r = 0,1,…,n. It is applicable when each trial has two outcomes, p stays constant, and trials are independent.</p></div>
+<div class="hinglish"><b class="lbl">Hinglish:</b> Binomial tab lagta hai jab har trial sirf success/failure deta hai (defective/OK, head/tail), p har baar same rahe (coin fair), aur trials independent hon (with replacement ya infinite population). Expansion (q+p)^n ke successive terms se P(0),P(1)… milte hain. Factorials: nCr = n!/(r!(n−r)!); 0! = 1.</div>
+<h3>Assumptions (must list in exam)</h3>
+<ol><li>Each trial has only two possible outcomes (success/failure).</li><li>The probability p remains the same every trial.</li><li>Trials are statistically independent.</li><li>Number of trials n is known and finite.</li></ol>
+<h2>2. Mean &amp; Standard Deviation</h2>
+<div class="formula">Mean µ = np · SD σ = √(npq), q = 1 − p</div>
+<div class="exbox"><div class="exhead">Example 1 — Four or More Heads <span class="badge b-src">SOURCE</span></div><div class="exbody">
+<p><b>Problem (Illustration 1):</b> Fair coin tossed 6 times. P(4 or more heads)?</p>
+<div class="steps">
+<div class="step">p = q = 1/2, n = 6 → P(r) = ⁶C_r(1/2)^6</div>
+<div class="step">P(4) = 15/64, P(5) = 6/64, P(6) = 1/64</div>
+<div class="step">P(≥4) = (15+6+1)/64 = 22/64 = 11/32</div>
+</div>
+<div class="final">Final Answer: 11/32 ≈ 0.3438</div></div></div>
+<div class="exbox"><div class="exhead">Example 2 — Mean &amp; SD of Defective Bolts <span class="badge b-src">SOURCE</span></div><div class="exbody">
+<p><b>Problem (Illustration 3):</b> p = 0.1 defective; n = 500 bolts. Mean &amp; SD?</p>
+<div class="steps">
+<div class="step">µ = np = 500 × 0.1 = 50 defective expected</div>
+<div class="step">σ = √(npq) = √(500·0.1·0.9) = √45 ≈ 6.71</div>
+</div>
+<div class="final">Final Answer: Mean 50, SD ≈ 6.71</div></div></div>
+<h2>3. Fitting a Binomial Distribution</h2>
+<ol><li>Determine p, q (p = 1−q). If p=q then symmetric; p&lt;0.5 → positively skewed.</li><li>Expand (p+q)ⁿ; n = one less than the number of terms.</li><li>Multiply each term by total frequency N to get expected frequencies.</li></ol>
+<div class="exbox"><div class="exhead">Example 3 — Fitting, 8 Coins 256 Throws <span class="badge b-src">SOURCE</span></div><div class="exbody">
+<p><b>Problem (Illustration 4):</b> 8 coins tossed 256 times; number of heads per throw recorded. Find expected frequencies; theoretical mean and SD; compare with observed.</p>
+<div class="steps">
+<div class="step">n = 8, p = 1/2 → theoretical µ = np = 4, σ = √(8·½·½) = √2 ≈ 1.414</div>
+<div class="step">Expected freq for r heads = 256 × ⁸C_r (1/2)⁸ = 256·⁸C_r/256 = ⁸C_r → 1,8,28,56,70,56,28,8,1</div>
+<div class="step">Observed mean ≈ 4.062, observed SD ≈ 1.462 — close agreement → binomial model valid</div>
+</div>
+<div class="final">Final Answer: Expected frequencies = 1, 8, 28, 56, 70, 56, 28, 8, 1; µ = 4; σ ≈ 1.414.</div></div></div>
+<h2>4. Characteristics</h2>
+<ul><li>Form depends on parameters p and n.</li><li>P(r successes) = ⁿC_r pʳ qⁿ⁻ʳ.</li><li>Mainly applied when population is infinite; finite population OK if not very small or sampling with replacement (p unchanged).</li></ul>
+<h2>5. Practice (Source)</h2>
+<div class="trybox"><span class="th">TRY YOURSELF</span>
+<p>Q1. (a) n=4, p=0.12 → P(0)? (b) n=10, p=0.40 → P(9)? (c) n=6, p=0.83 → P(5)?</p>
+<button class="revealbtn" data-l="Show Hint" onclick="rev(this)">Show Hint</button><div class="hiddenb hinglish">P(r) = ⁿC_r pʳ qⁿ⁻ʳ direct lagao; (a) r=0 ke liye sirf qⁿ.</div>
+<button class="revealbtn" data-l="Show Answer" onclick="rev(this)">Show Answer</button><div class="hiddenb final">(a) (0.88)⁴ ≈ 0.5997; (b) 10·0.4⁹·0.6 ≈ 10·0.000262·0.6 ≈ 0.00157; (c) 6·0.83⁵·0.17 ≈ 6·0.4437·... compute: 0.83⁵=0.4240 → 6×0.4240×0.17 ≈ 0.4325.</div>
+<p>Q2. 5 coins thrown 3100 times; observed heads: 0→32, 1→225, 2→710, 3→1085, 4→820, 5→228. Expected frequencies &amp; theoretical mean/SD?</p>
+<button class="revealbtn" data-l="Show Hint" onclick="rev(this)">Show Hint</button><div class="hiddenb hinglish">n=5, p=1/2 → expected = 3100 × ⁵C_r/32.</div>
+<button class="revealbtn" data-l="Show Answer" onclick="rev(this)">Show Answer</button><div class="hiddenb final">Expected: 96.9, 484.4, 968.75, 968.75, 484.4, 96.9 (⁵C_r = 1,5,10,10,5,1 → /32 each). µ = np = 2.5; σ = √(5·½·½) = √1.25 ≈ 1.118. Observed data roughly matches → acceptable fit.</div>
+<p class="tocnote">Q1–Q2 <span class="badge b-src">SOURCE QUESTIONS</span> Answers <span class="badge b-gen">GENERATED SOLUTIONS</span></p>
+</div>
+<div class="tip"><b class="lbl">Exam Focus:</b> Formula P(r)=ⁿC_rpʳqⁿ⁻ʳ, assumptions list, µ=np, σ=√npq, fitting procedure.</div>
+<button class="markbtn" onclick="markDone('u3binom')">✔ Mark Section Complete</button>
+</div>
+
+<div class="pg" id="u3pois">
+<h1 class="title">Unit 3 · Poisson Distribution</h1>
+<p class="sub">Lecture 3.5 <span class="badge b-src">SOURCE CONTENT</span></p>
+<h2>1. Concept</h2>
+<div class="defbox"><span class="lbl">Formal Definition</span><p>The <b>Poisson distribution</b> (Simeon Poisson) counts the number of occurrences of an event in a fixed interval of time/space, used when events are infrequent. When n is large (n&gt;50) and p is very small (even &lt;0.01) so that np is constant, the binomial is approximated by Poisson: \(P(r) = \frac{m^r e^{-m}}{r!}\), r = 0,1,2,…, e ≈ 2.7183, m = np (mean).</p></div>
+<div class="hinglish"><b class="lbl">Hinglish:</b> Poisson = binomial ki limiting form jab success bahut rare ho (defects, accidents). Single parameter m se poori distribution banti hai. Kabhi bhi rare-event + large n + small p dekho, toh Poisson flag karo.</div>
+<h3>Characteristics</h3>
+<ul><li>Discrete probability distribution; limiting form of binomial.</li><li>Range: 0 ≤ r &lt; ∞; single parameter m.</li><li>Positively skewed; skewness decreases as m increases.</li><li><b>Mean = Variance = np = m</b>; SD = √m.</li></ul>
+<div class="exbox"><div class="exhead">Example 1 — 2% Defective Toys <span class="badge b-src">SOURCE</span></div><div class="exbody">
+<p><b>Problem (Illustration 5):</b> 2% of toys defective. P(exactly 5 defectives in shipment of 200)? Mean and SD?</p>
+<div class="steps">
+<div class="step">n large, p small → Poisson. m = np = 200×0.02 = 4</div>
+<div class="step">P(5) = m⁵e⁻ᵐ/5! = (1024×0.0183)/120 ≈ 0.156</div>
+<div class="step">Mean = 4, σ = √4 = 2</div>
+</div>
+<div class="final">Final Answer: P(5) ≈ 0.156; mean 4; SD 2.</div></div></div>
+<div class="exbox"><div class="exhead">Example 2 — Binomial vs Poisson Comparison <span class="badge b-src">SOURCE</span></div><div class="exbody">
+<p><b>Problem (Illustration 6):</b> 30 tools, p(defect) = 0.02. P(4 defective) via (i) binomial (ii) Poisson.</p>
+<div class="steps">
+<div class="step">(i) Binomial: ³⁰C₄(0.02)⁴(0.98)²⁶ = 27405 × 1.6×10⁻⁷ × 0.59 ≈ 0.00259</div>
+<div class="step">(ii) Poisson: m = 0.6 → P(4) = (0.6)⁴e⁻⁰·⁶/4! = 0.1296×0.5488/24 ≈ 0.00296</div>
+</div>
+<div class="final">Final Answer: 0.00259 vs 0.00296 — Poisson approximates binomial when p small.</div></div></div>
+<h2>2. Fitting a Poisson Distribution</h2>
+<ol><li>Obtain m = np from observed data.</li><li>Compute P(r) = mʳe⁻ᵐ/r! for each r.</li><li>Multiply each probability by N to get expected frequencies.</li></ol>
+<div class="exbox"><div class="exhead">Example 3 — Fitting Defects Data <span class="badge b-src">SOURCE</span></div><div class="exbody">
+<p><b>Problem (Illustration 7):</b> Defects per unit in 330 units: 0→214, 1→92, 2→20, 3→3, 4→1. Fit Poisson.</p>
+<div class="steps">
+<div class="step">m = (0·214 + 1·92 + 2·20 + 3·3 + 4·1)/330 = 145/330 ≈ 0.439</div>
+<div class="step">P(r) = (0.439)ʳe⁻⁰·⁴³⁹/r!; expected frequency = 330 × P(r)</div>
+<div class="step">e⁻⁰·⁴³⁹ ≈ 0.6447 → P(0) ≈ 0.6447 → E₀ ≈ 212.8; P(1) ≈ 0.2830 → E₁ ≈ 93.4; P(2) ≈ 0.0621 → E₂ ≈ 20.5; P(3) ≈ 0.0091 → E₃ ≈ 3.0; P(4) ≈ 0.0010 → E₄ ≈ 0.3</div>
+</div>
+<div class="final">Final Answer: m ≈ 0.439; expected frequencies ≈ 212.8, 93.4, 20.5, 3.0, 0.3 — close to observed → good fit.</div></div></div>
+<h2>3. Practice (Source)</h2>
+<div class="trybox"><span class="th">TRY YOURSELF</span>
+<p>Q1. What are the features of binomial and Poisson distributions?</p>
+<button class="revealbtn" data-l="Show Hint" onclick="rev(this)">Show Hint</button><div class="hiddenb hinglish">Binomial: params n,p; Poisson: single param m, limiting case. Mean/SD doono ke likho.</div>
+<button class="revealbtn" data-l="Show Answer" onclick="rev(this)">Show Answer</button><div class="hiddenb final">Binomial: P(r)=ⁿC_rpʳqⁿ⁻ʳ; µ=np, σ=√npq; two parameters; finite range. Poisson: P(r)=mʳe⁻ᵐ/r!; single parameter m; mean=variance=m; positively skewed; limiting form of binomial for large n, small p.</div>
+<p>Q2. Average 2% of bulbs defective. 100 bulbs/day → P(4 defective that day)?</p>
+<button class="revealbtn" data-l="Show Hint" onclick="rev(this)">Show Hint</button><div class="hiddenb hinglish">m = 100×0.02 = 2; P(4) = 2⁴e⁻²/4!.</div>
+<button class="revealbtn" data-l="Show Answer" onclick="rev(this)">Show Answer</button><div class="hiddenb final">P(4) = (16 × 0.1353)/24 ≈ 0.0902.</div>
+<p>Q3. 400 car ACs inspected; defects 0..5 with counts 142, 156, 69, 27, 5, 1. Expected frequencies (Poisson)?</p>
+<button class="revealbtn" data-l="Show Hint" onclick="rev(this)">Show Hint</button><div class="hiddenb hinglish">m = Σf r/N. N=400. m = (0+156+138+81+20+5)/400 = 400/400 = 1.</div>
+<button class="revealbtn" data-l="Show Answer" onclick="rev(this)">Show Answer</button><div class="hiddenb final">m = 1 → P(r) = e⁻¹/r! ≈ 0.3679, 0.3679, 0.1839, 0.0613, 0.0153, 0.0031. Expected (×400) ≈ 147.2, 147.2, 73.6, 24.5, 6.1, 1.2.</div>
+<p class="tocnote">Q1–Q3 <span class="badge b-src">SOURCE QUESTIONS</span> Answers <span class="badge b-gen">GENERATED SOLUTIONS</span></p>
+</div>
+<div class="tip"><b class="lbl">Exam Focus:</b> P(r)=mʳe⁻ᵐ/r!, mean = variance = m, when Poisson applies (n large, p small), fitting procedure.</div>
+<button class="markbtn" onclick="markDone('u3pois')">✔ Mark Section Complete</button>
+</div>
+
+<div class="pg" id="u3norm">
+<h1 class="title">Unit 3 · Normal Distribution (Continuous)</h1>
+<p class="sub">Lecture 3.6 <span class="badge b-src">SOURCE CONTENT</span></p>
+<h2>1. Concept</h2>
+<div class="defbox"><span class="lbl">Formal Definition</span><p>The <b>Normal distribution</b> is the most versatile continuous probability distribution, suitable for variables continuous in magnitude, fully determined by two parameters — mean µ and standard deviation σ. The standard random variable is \(Z = \frac{X - \mu}{\sigma}\).</p></div>
+<div class="hinglish"><b class="lbl">Hinglish:</b> Normal curve bell-shaped hai, symmetric (skewness = 0), mean = median = mode. Tails axis ko kabhi touch nahi karti. Z-score bataata hai X mean se kitne SD door hai — phir Z-table se area/probability nikalte hain. Do parameters yaad rakho: µ aur σ.</div>
+<h3>Characteristics (learn all)</h3>
+<ol><li>Single peak — unimodal, bell-shaped.</li><li>Symmetric → mean = median = mode (skewness 0).</li><li>Tails extend indefinitely, never touching the axis.</li><li>Total area under curve = 1.</li></ol>
+<h2>2. Areas Under the Normal Curve (memorize)</h2>
+<table class="tbl">
+<tr><th>Range</th><th>Area Covered</th><th>Each Side of µ</th></tr>
+<tr><td>µ ± 1σ</td><td>68%</td><td>34.13%</td></tr>
+<tr><td>µ ± 2σ</td><td>95.5%</td><td>47.75%</td></tr>
+<tr><td>µ ± 3σ</td><td>99.7%</td><td>49.85%</td></tr>
+</table>
+<h2>3. Using the Standard Normal Table — Two Steps</h2>
+<div class="steps">
+<div class="step">Step 1: Convert to standard normal: \(Z = \frac{X - \mu}{\sigma}\) (Z = number of SDs from X to mean).</div>
+<div class="step">Step 2: Look up the Z value in the standard normal area table (gives area from mean to Z).</div>
+</div>
+<div class="hinglish"><b class="lbl">Tactics (Hinglish):</b> Table area mean se Z tak deti hai (0 to Z). Right of Z (z&gt;0): 0.5 − table. Left of Z: 0.5 + table. Between two Zs: areas add/subtract. Negative Z: symmetry use karo.</div>
+<div class="exbox"><div class="exhead">Example 1 — Table Lookup Basics <span class="badge b-src">SOURCE</span></div><div class="exbody">
+<div class="steps">
+<div class="step">(a) Area between Z=0 and Z=1.54 → table entry = 0.4382</div>
+<div class="step">(b) Z = −1.46 → use symmetry, area = 0.4279</div>
+<div class="step">(c) Area right of Z = 0.25 → 0.5 − 0.0987 = 0.4013</div>
+<div class="step">(d) Area left of Z = 1.83 → 0.5 + 0.4664 = 0.9664</div>
+</div>
+<div class="final">Final Answers: 0.4382; 0.4279; 0.4013; 0.9664.</div></div></div>
+<div class="exbox"><div class="exhead">Example 2 — Soldiers' Heights <span class="badge b-src">SOURCE</span></div><div class="exbody">
+<p><b>Problem (Illustration 9):</b> Mean height 68.22 inches, variance 10.8. How many of 1000 soldiers are over 6 feet (72 in)?</p>
+<div class="steps">
+<div class="step">σ = √10.8 = 3.286; Z = (72−68.22)/3.286 = 1.15</div>
+<div class="step">Area (0→Z) = 0.3749; right tail = 0.5 − 0.3749 = 0.1251</div>
+<div class="step">Expected = 1000 × 0.1251 ≈ 125</div>
+</div>
+<div class="final">Final Answer: ≈ 125 soldiers.</div></div></div>
+<div class="exbox"><div class="exhead">Example 3 — Training Programme <span class="badge b-src">SOURCE</span></div><div class="exbody">
+<p><b>Problem (Illustration 11):</b> µ = 500 hours, σ = 100. (i) P(fewer than 570 hours) (ii) P(between 430 and 580).</p>
+<div class="steps">
+<div class="step">(i) Z = (570−500)/100 = 0.7 → table 0.2580 → left = 0.5 + 0.2580 = 0.7580</div>
+<div class="step">(ii) Z₁ = −0.7 (0.2580), Z₂ = 0.8 (0.2881) → total = 0.5461</div>
+</div>
+<div class="final">Final Answers: (i) 0.7580 (ii) 0.5461</div></div></div>
+<h2>4. Importance &amp; Applications</h2>
+<ul><li>Industrial quality control; testing of significance; sampling distributions; graduating non-normal curves.</li><li>Purpose: (i) fit measurement distributions for sample data; (ii) approximate binomial, Poisson etc.; (iii) fit sampling distributions of statistics like mean/variance.</li></ul>
+<h2>5. Practice (Source)</h2>
+<div class="trybox"><span class="th">TRY YOURSELF</span>
+<p>Q1. (a) P(Z &lt; 1.08) (b) P(Z &gt; −0.21) (c) P(0 &lt; Z &lt; 1.08) (e) P(−0.21 &lt; Z &lt; 0).</p>
+<button class="revealbtn" data-l="Show Hint" onclick="rev(this)">Show Hint</button><div class="hiddenb hinglish">Left of positive Z → 0.5+table; right of negative Z → 0.5+table; between → table only.</div>
+<button class="revealbtn" data-l="Show Answer" onclick="rev(this)">Show Answer</button><div class="hiddenb final">(a) 0.5 + 0.3599 = 0.8599; (b) 0.5 + 0.0832 = 0.5832; (c) 0.3599; (e) 0.0832. (Z-table values used as in source practice set.)</div>
+<p>Q2. µ = 100, σ = 10. (a) P(X&gt;75) (b) P(X&lt;70) (c) P(X&gt;112).</p>
+<button class="revealbtn" data-l="Show Hint" onclick="rev(this)">Show Hint</button><div class="hiddenb hinglish">Z nikaalo: (a) Z=−2.5 → right tail = 0.5+table(2.5).</div>
+<button class="revealbtn" data-l="Show Answer" onclick="rev(this)">Show Answer</button><div class="hiddenb final">(a) Z=−2.5 → 0.5+0.4938=0.9938; (b) Z=−3 → left = 0.5−0.4987=0.0013; (c) Z=1.2 → right = 0.5−0.3849=0.1151.</div>
+<p class="tocnote">Q1–Q2 <span class="badge b-src">SOURCE QUESTIONS</span> Answers <span class="badge b-gen">GENERATED SOLUTIONS</span></p>
+</div>
+<div class="tip"><b class="lbl">Exam Focus:</b> Z = (X−µ)/σ, 68/95.5/99.7 rule, table tactics (add for left of +Z, subtract for right), expected count = N×probability.</div>
+<button class="markbtn" onclick="markDone('u3norm')">✔ Mark Section Complete</button>
+</div>
+<div class="pg" id="defbank">
+<h1 class="title">📕 Definition Bank — Rapid Exam Memorization</h1>
+<p class="sub">Formal Definition (exam-ready English) + Hinglish meaning + Keywords. Click-and-reveal for self-testing.</p>
+<div class="card"><h3 style="margin-top:0">Unit 1 — Basic Statistics</h3>
+<div class="qitem"><button class="revealbtn" data-l="Arithmetic Mean" onclick="rev(this)">Arithmetic Mean</button><div class="hiddenb"><p><b>Formal:</b> Value obtained by dividing the sum of all observations by the number of observations. <b>Hinglish:</b> Sab values ka sum ÷ total count. <b>Keywords:</b> sum, observations, divide, average.</p></div></div>
+<div class="qitem"><button class="revealbtn" data-l="Median" onclick="rev(this)">Median</button><div class="hiddenb"><p><b>Formal:</b> Middle-most value of ordered data dividing distribution into two equal parts. <b>Hinglish:</b> Sorted data ka beech ka value; extreme values se affect nahi hota. <b>Keywords:</b> ordered, middle, (n+1)/2th, robust.</p></div></div>
+<div class="qitem"><button class="revealbtn" data-l="Mode" onclick="rev(this)">Mode</button><div class="hiddenb"><p><b>Formal:</b> Observation occurring most frequently (maximum frequency). <b>Hinglish:</b> Sabse zyada baar aane wali value. <b>Keywords:</b> most frequent, maximum frequency, unimodal/bimodal.</p></div></div>
+<div class="qitem"><button class="revealbtn" data-l="Combined Mean" onclick="rev(this)">Combined Mean</button><div class="hiddenb"><p><b>Formal:</b> The mean of a group formed by combining groups with different means and sizes; \(\bar{X}_c = \frac{n_1\bar{X}_1+n_2\bar{X}_2}{n_1+n_2}\). <b>Keywords:</b> composite, weighted by size.</p></div></div>
+<div class="qitem"><button class="revealbtn" data-l="Weighted Mean" onclick="rev(this)">Weighted Mean</button><div class="hiddenb"><p><b>Formal:</b> Average computed by assigning different weights (importance) to observations; \(\bar{X}_w = \frac{\sum w_ix_i}{\sum w_i}\). <b>Keywords:</b> weights, importance, expected value analog.</p></div></div>
+<div class="qitem"><button class="revealbtn" data-l="Range" onclick="rev(this)">Range</button><div class="hiddenb"><p><b>Formal:</b> Difference between largest and smallest values, R = L − S. <b>Keywords:</b> simplest, L−S, extreme sensitivity.</p></div></div>
+<div class="qitem"><button class="revealbtn" data-l="Quartile Deviation" onclick="rev(this)">Quartile Deviation</button><div class="hiddenb"><p><b>Formal:</b> Semi-interquartile range, Q.D. = (Q₃ − Q₁)/2. <b>Keywords:</b> semi-interquartile, quartiles, robust.</p></div></div>
+<div class="qitem"><button class="revealbtn" data-l="Mean Deviation" onclick="rev(this)">Mean Deviation</button><div class="hiddenb"><p><b>Formal:</b> Arithmetic mean of absolute deviations from mean (or specified value). <b>Keywords:</b> absolute deviations, |x−x̄|.</p></div></div>
+<div class="qitem"><button class="revealbtn" data-l="Standard Deviation" onclick="rev(this)">Standard Deviation</button><div class="hiddenb"><p><b>Formal:</b> Positive square-root of the arithmetic mean of squared deviations from the arithmetic mean. <b>Keywords:</b> square-root, squared deviations, σ/s.</p></div></div>
+<div class="qitem"><button class="revealbtn" data-l="Variance" onclick="rev(this)">Variance</button><div class="hiddenb"><p><b>Formal:</b> Square of the standard deviation. <b>Keywords:</b> (SD)², μ₂.</p></div></div>
+<div class="qitem"><button class="revealbtn" data-l="Coefficient of Variation" onclick="rev(this)">Coefficient of Variation</button><div class="hiddenb"><p><b>Formal:</b> Relative measure of dispersion = (SD/mean) × 100, expressed as percentage. <b>Keywords:</b> relative, percentage, comparison.</p></div></div>
+</div>
+<div class="card"><h3 style="margin-top:0">Unit 2 — Moments, Skewness, Kurtosis</h3>
+<div class="qitem"><button class="revealbtn" data-l="Moments" onclick="rev(this)">Moments</button><div class="hiddenb"><p><b>Formal:</b> Statistical measures describing characteristics of a distribution — arithmetic means of powers of deviations from mean or arbitrary point. <b>Keywords:</b> raw, central, arbitrary point, μ₀=1, μ₁=0, μ₂=σ².</p></div></div>
+<div class="qitem"><button class="revealbtn" data-l="Skewness" onclick="rev(this)">Skewness</button><div class="hiddenb"><p><b>Formal:</b> Lack of symmetry; asymmetric distribution where mean, median, mode do not coincide. Positive: right tail longer (mean&gt;median&gt;mode); negative: left tail longer. <b>Keywords:</b> asymmetry, tail, direction.</p></div></div>
+<div class="qitem"><button class="revealbtn" data-l="Kurtosis" onclick="rev(this)">Kurtosis</button><div class="hiddenb"><p><b>Formal:</b> Measure of flatness/peakedness of a distribution relative to the normal curve (Pearson's "convexity of curve"); β₂ = μ₄/μ₂². <b>Keywords:</b> peakedness, tailedness, lepto/meso/platy.</p></div></div>
+<div class="qitem"><button class="revealbtn" data-l="Lepto/Meso/Platykurtic" onclick="rev(this)">Lepto/Meso/Platykurtic</button><div class="hiddenb"><p><b>Formal:</b> Leptokurtic β₂&gt;3 (peaked, heavy tails); Mesokurtic β₂=3 (normal); Platykurtic β₂&lt;3 (flat, light tails). <b>Keywords:</b> threshold 3, excess γ₂=β₂−3.</p></div></div>
+<div class="qitem"><button class="revealbtn" data-l="Sheppard's Corrections" onclick="rev(this)">Sheppard's Corrections</button><div class="hiddenb"><p><b>Formal:</b> Corrections for grouping errors in moments of grouped continuous distributions when midpoints assumption fails; μ₂ corrected by −h²/12. <b>Keywords:</b> grouping errors, class width h.</p></div></div>
+<div class="qitem"><button class="revealbtn" data-l="Pearson β/γ" onclick="rev(this)">Pearson β/γ Coefficients</button><div class="hiddenb"><p><b>Formal:</b> β₁=μ₃²/μ₂³ (skewness), γ₁=±√β₁=μ₃/σ³; β₂=μ₄/μ₂² (kurtosis), γ₂=β₂−3. <b>Keywords:</b> central moments, direction sign from μ₃.</p></div></div>
+</div>
+<div class="card"><h3 style="margin-top:0">Unit 3 — Probability &amp; Distributions</h3>
+<div class="qitem"><button class="revealbtn" data-l="Random Experiment" onclick="rev(this)">Random Experiment</button><div class="hiddenb"><p><b>Formal:</b> Experiment whose outcome cannot be predicted with certainty in advance. <b>Keywords:</b> uncertainty, outcomes.</p></div></div>
+<div class="qitem"><button class="revealbtn" data-l="Sample Space" onclick="rev(this)">Sample Space</button><div class="hiddenb"><p><b>Formal:</b> Set of all possible outcomes of a random experiment, denoted S. <b>Keywords:</b> all outcomes, S.</p></div></div>
+<div class="qitem"><button class="revealbtn" data-l="Event" onclick="rev(this)">Event</button><div class="hiddenb"><p><b>Formal:</b> A subset of the sample space. <b>Keywords:</b> subset, A/B/C notation.</p></div></div>
+<div class="qitem"><button class="revealbtn" data-l="Classical Probability" onclick="rev(this)">Classical Probability</button><div class="hiddenb"><p><b>Formal:</b> If n equally likely outcomes and m favorable for A, P(A) = m/n; 0 ≤ P(A) ≤ 1. <b>Keywords:</b> favorable/total.</p></div></div>
+<div class="qitem"><button class="revealbtn" data-l="Conditional Probability" onclick="rev(this)">Conditional Probability</button><div class="hiddenb"><p><b>Formal:</b> Probability of A given B has occurred, P(A|B) = P(A∩B)/P(B), P(B)≠0. <b>Keywords:</b> given, reduced sample space.</p></div></div>
+<div class="qitem"><button class="revealbtn" data-l="Bayes Theorem" onclick="rev(this)">Bayes Theorem</button><div class="hiddenb"><p><b>Formal:</b> P(A|B) = P(B|A)P(A)/P(B) — revises probabilities with new information. <b>Keywords:</b> revise, posterior.</p></div></div>
+<div class="qitem"><button class="revealbtn" data-l="Independent Events" onclick="rev(this)">Independent Events</button><div class="hiddenb"><p><b>Formal:</b> Events where occurrence of one does not affect the other; P(A∩B)=P(A)P(B). <b>Keywords:</b> unaffected, product rule.</p></div></div>
+<div class="qitem"><button class="revealbtn" data-l="Random Variable" onclick="rev(this)">Random Variable</button><div class="hiddenb"><p><b>Formal:</b> Real-valued function on sample space with probabilities assigned, all summing to 1. <b>Discrete:</b> countable values. <b>Continuous:</b> all real values in an interval. <b>Keywords:</b> function, domain, range, sum=1.</p></div></div>
+<div class="qitem"><button class="revealbtn" data-l="PMF" onclick="rev(this)">PMF</button><div class="hiddenb"><p><b>Formal:</b> p(xᵢ) = P(X=xᵢ) with p≥0, Σp=1 (discrete). <b>Keywords:</b> mass, discrete.</p></div></div>
+<div class="qitem"><button class="revealbtn" data-l="PDF" onclick="rev(this)">PDF</button><div class="hiddenb"><p><b>Formal:</b> f(x) (dx→0 limit) with f≥0, ∫f dx = 1 (continuous); P[a&lt;X&lt;b] = ∫ab f dx. <b>Keywords:</b> density, continuous, integral.</p></div></div>
+<div class="qitem"><button class="revealbtn" data-l="CDF / Distribution Function" onclick="rev(this)">CDF / Distribution Function</button><div class="hiddenb"><p><b>Formal:</b> F(x) = P[X ≤ x]; domain real numbers, range [0,1]; f(x) = F′(x). <b>Keywords:</b> cumulative, cumulative ≤ x.</p></div></div>
+<div class="qitem"><button class="revealbtn" data-l="Binomial Distribution" onclick="rev(this)">Binomial Distribution</button><div class="hiddenb"><p><b>Formal:</b> Discrete distribution of successes in n independent dichotomous trials, P(r)=ⁿC_rpʳqⁿ⁻ʳ; µ=np, σ=√npq. <b>Keywords:</b> success/failure, independent, constant p.</p></div></div>
+<div class="qitem"><button class="revealbtn" data-l="Poisson Distribution" onclick="rev(this)">Poisson Distribution</button><div class="hiddenb"><p><b>Formal:</b> Limiting form of binomial for large n, small p with np=m constant; P(r)=mʳe⁻ᵐ/r!; mean=variance=m. <b>Keywords:</b> rare events, single parameter.</p></div></div>
+<div class="qitem"><button class="revealbtn" data-l="Normal Distribution" onclick="rev(this)">Normal Distribution</button><div class="hiddenb"><p><b>Formal:</b> Bell-shaped continuous distribution with mean=median=mode, fully characterized by µ and σ; Z=(X−µ)/σ. <b>Keywords:</b> bell, symmetric, two parameters, Z-score.</p></div></div>
+<div class="qitem"><button class="revealbtn" data-l="Expected Value" onclick="rev(this)">Expected Value</button><div class="hiddenb"><p><b>Formal:</b> Fundamental idea of probability distributions — sum of (value × probability); E(X) = Σxᵢpᵢ; weighted mean analog. <b>Keywords:</b> Σ xp, weighted mean.</p></div></div>
+</div>
+</div>
+
+<div class="pg" id="formulas">
+<h1 class="title">📐 Master Formula Sheet</h1>
+<p class="sub">Syllabus-wise organization. Har formula ke saath meaning &amp; conditions.</p>
+<h2>Unit 1 — Central Tendency</h2>
+<div class="formula">Mean (ungrouped): \(\bar{x} = \frac{\sum x_i}{n}\) · (grouped): \(\frac{\sum f_i x_i}{\sum f_i}\) — basic average; any data.</div>
+<div class="formula">Short-cut: \(\bar{x} = A + \frac{\sum f_iD_i}{\sum f_i}, D_i = x_i - A\) — big numbers simplified.</div>
+<div class="formula">Step-deviation: \(\bar{x} = A + \frac{\sum f_iu_i}{\sum f_i}h,\ u_i = \frac{x_i-A}{h}\) — equal class width h.</div>
+<div class="formula">Combined mean: \(\bar{X}_c = \frac{n_1\bar{X}_1 + n_2\bar{X}_2}{n_1+n_2}\) — merging groups.</div>
+<div class="formula">Weighted mean: \(\bar{X}_w = \frac{\sum w_i x_i}{\sum w_i}\) — importance weights.</div>
+<div class="formula">Median: value of (n+1)/2-th (odd n); average of n/2 &amp; (n/2+1)-th (even n) after ordering.</div>
+<div class="formula">Mode: maximum-frequency value; empirical: Mode = 3·Median − 2·Mean.</div>
+<h2>Unit 1 — Dispersion</h2>
+<div class="formula">Range = L − S (largest − smallest).</div>
+<div class="formula">Quartile Deviation = (Q₃ − Q₁)/2; interquartile range = Q₃ − Q₁. Quartiles (individual): (n+1)/4-th, 3(n+1)/4-th items. Grouped: \(Q_1 = L + \frac{n/4 - m}{f}C\).</div>
+<div class="formula">Mean Deviation = \(\frac{1}{n}\sum|x_i - \bar{x}|\) / \(\frac{1}{N}\sum f_i|x_i - \bar{x}|\).</div>
+<div class="formula">Standard Deviation: \(s = \sqrt{\frac{1}{n}\sum(x_i - \bar{x})^2}\); grouped: \(\sqrt{\frac{1}{N}\sum f_i(x_i - \bar{x})^2}\); step form: \(C\sqrt{\frac{\sum fd^2}{N} - ( \frac{\sum fd}{N} )^2}\).</div>
+<div class="formula">Variance = (SD)²; Population σ² = Σ(x−µ)²/N; Sample s² = Σ(x−x̄)²/(n−1).</div>
+<div class="formula">Coefficient of Variation: C.V. = \(\frac{\sigma}{\bar{x}} \times 100\%\).</div>
+<div class="formula">Combined Variance = \(\frac{\sum n_i(\sigma_i^2 + d_i^2)}{N},\ d_i = \bar{X}_i - \bar{X}_c\).</div>
+<h2>Unit 2 — Moments, Skewness, Kurtosis</h2>
+<div class="formula">Raw moment about A: \(\mu^{\prime}_r = \frac{\sum f_i(x_i - A)^r}{N}\); with short-cut: \(h^r \frac{\sum f_i d_i^r}{N},\ d_i = (x_i - A)/h\).</div>
+<div class="formula">Central moment: \(\mu_r = \frac{\sum f_i(x_i - \bar{x})^r}{N}\); μ₀=1, μ₁=0, μ₂=σ².</div>
+<div class="formula">Conversions: μ₂ = μ′₂ − μ′₁²; μ₃ = μ′₃ − 3μ′₁μ′₂ + 2μ′₁³; μ₄ = μ′₄ − 4μ′₁μ′₃ + 6μ′₁²μ′₂ − 3μ′₁⁴.</div>
+<div class="formula">Sheppard: μ₂c = μ₂ − h²/12; μ₄c = μ₄ − (h²/12)μ₂ + 7h⁴/240.</div>
+<div class="formula">Pearson skewness: Sₖ = (Mean − Mode)/σ; mode-less: Sₖ = 3(Mean − Median)/σ; Bowley: Sₖ = (Q₃ + Q₁ − 2Q₂)/(Q₃ − Q₁).</div>
+<div class="formula">β₁ = μ₃²/μ₂³; γ₁ = ±√β₁ = μ₃/σ³; β₂ = μ₄/μ₂²; γ₂ (excess kurtosis) = β₂ − 3; absolute Sₖ: Mean−Median, Mean−Mode, (Q₃−Q₂)−(Q₂−Q₁).</div>
+<h2>Unit 3 — Probability &amp; Distributions</h2>
+<div class="formula">P(A) = m/n · P(A∪B) = P(A) + P(B) − P(A∩B) · P(A′) = 1 − P(A) · P(A∩B) = P(A)P(B|A) (indep.: P(A)P(B)) · P(A|B) = P(A∩B)/P(B) · Bayes: P(A|B) = P(B|A)P(A)/P(B).</div>
+<div class="formula">Binomial: P(r) = ⁿC_r pʳ qⁿ⁻ʳ = \(\frac{n!}{r!(n-r)!}p^rq^{n-r}\); µ = np; σ = √(npq). Conditions: 2 outcomes, constant p, independent trials, known n.</div>
+<div class="formula">Poisson: P(r) = \(\frac{m^r e^{-m}}{r!}\); m = np; mean = variance = m; SD=√m. Applies when n large (&gt;50), p small (&lt;0.01).</div>
+<div class="formula">Normal: Z = \(\frac{X - \mu}{\sigma}\); µ±1σ→68%, µ±2σ→95.5%, µ±3σ→99.7%.</div>
+</div>
+<div class="pg" id="qbank">
+<h1 class="title">🗂 Master Question Bank</h1>
+<p class="sub">Filterable university-exam practice repository. Source questions priority-marked.</p>
+<div class="filters">
+<select id="funit"><option value="">Unit: All</option><option value="U1">Unit 1</option><option value="U2">Unit 2</option><option value="U3">Unit 3</option></select>
+<select id="fdiff"><option value="">Difficulty: All</option><option value="Basic">Basic</option><option value="Standard">Standard</option><option value="University">University</option><option value="Challenging">Challenging</option></select>
+<select id="ftype"><option value="">Type: All</option><option value="Conceptual">Conceptual</option><option value="Direct Numerical">Direct Numerical</option><option value="Standard Numerical">Standard Numerical</option><option value="Long Numerical">Long Numerical</option><option value="Theory/Derivation">Theory/Derivation</option><option value="Mixed Concept">Mixed Concept</option></select>
+<input id="fsearch" placeholder="Search in questions…">
+<span id="qcount" class="tocnote"></span>
+</div>
+<div id="qblist" class="qlist"></div>
+</div>
+
+<div class="pg" id="quiz">
+<h1 class="title">📝 Mock Practice Quiz</h1>
+<p class="sub">Exam-condition self-test — har question ka score turant. Answers hidden until submitted.</p>
+<div id="quizbox"></div>
+<button class="tbtn" onclick="gradeQuiz()">Submit &amp; Check Score</button>
+<div id="quizscore" class="final" style="display:none;margin-top:12px"></div>
+</div>
+<!-- @CONTENT@ -->
+</main>
+</div>
+<script id="appjs">
+const NAV=[
+ {g:'',links:[['dash','🏠 Dashboard'],['road','🧭 Study Roadmap']]},
+ {g:'UNIT 1 · BASIC STATISTICS',links:[
+  ['u1intro','1 / Introduction & Foundations'],
+  ['u1central','Measures of Central Tendency'],
+  ['u1combined','Combined & Weighted Mean'],
+  ['u1range','Range & Quartile Deviation'],
+  ['u1md','Mean Deviation'],
+  ['u1sd','SD, Variance & Coefficient of Variation']]},
+ {g:'UNIT 2 · MOMENTS, SKEWNESS & KURTOSIS',links:[
+  ['u2moments','Moments'],
+  ['u2momrel','Moment Relations & Pearson β, γ'],
+  ['u2skew','Skewness — Pearson & Bowley'],
+  ['u2kurt','Kurtosis & Nature of Distribution']]},
+ {g:'UNIT 3 · PROBABILITY & DISTRIBUTIONS',links:[
+  ['u3prob','Probability — Definitions & Laws'],
+  ['u3cond','Conditional Probability & Bayes'],
+  ['u3rv','Random Variables, PMF, PDF, CDF'],
+  ['u3binom','Binomial Distribution'],
+  ['u3pois','Poisson Distribution'],
+  ['u3norm','Normal Distribution']]},
+ {g:'EXAM SYSTEM',links:[
+  ['defbank','📕 Definition Bank'],
+  ['formulas','📐 Master Formula Sheet'],
+  ['qbank','🗂 Master Question Bank'],
+  ['quiz','📝 Mock Practice Quiz']]}
+];
+const PAGES={};
+function markDone(id){let d=gD();d.includes(id)?d.splice(d.indexOf(id),1):d.push(id);localStorage.setItem('psdone',JSON.stringify(d));renderNav();go(id);}
+function gD(){try{return JSON.parse(localStorage.getItem('psdone'))||[]}catch(e){return[]}}
+function renderNav(){
+ let h='';const d=gD();
+ for(const grp of NAV){if(grp.g)h+=`<div class="navgrp"><h4>${grp.g}</h4>`;else h+='<div class="navgrp">';
+  for(const [id,t] of grp.links){const dn=d.includes(id)?'done':'';h+=`<a class="nav ${dn}" href="#${id}" data-id="${id}">${t}<span class="tick">✔</span></a>`;}
+  h+='</div>';}
+ document.getElementById('side').innerHTML=h;
+ const total=NAV.flatMap(g=>g.links).length;
+ const db=document.getElementById('dashprog');if(db)db.style.width=Math.round(d.length/total*100)+'%';
+ const dc=document.getElementById('dashcount');if(dc)dc.textContent=d.length+' / '+total;
+}
+function typeset(){
+ if(window.renderMathInElement)try{renderMathInElement(document.body,{delimiters:[{left:'\\(',right:'\\)',display:false},{left:'$$',right:'$$',display:true},{left:'\\[',right:'\\]',display:true}],throwOnError:false,errorColor:'#f87171'});}catch(e){}
+}
+function go(id){
+ const el=PAGES[id];if(!el)return;
+ document.querySelectorAll('.pg').forEach(p=>p.style.display='none');
+ el.style.display='block';
+ document.querySelectorAll('#side a.nav').forEach(a=>a.classList.toggle('active',a.dataset.id===id));
+ window.scrollTo({top:0});location.hash=id;typeset();
+}
+function rev(btn){
+ const t=btn.nextElementSibling;const hide=t.classList.toggle('hiddenb');
+ btn.textContent=hide?btn.dataset.l:btn.dataset.l.replace(/Show|Reveal/,x=>x==='Show'?'Hide':'Hide');
+ if(hide&&btn.dataset.l.indexOf('Show')===-1)btn.textContent=btn.dataset.l;
+ if(!hide)typeset();
+}
+window.addEventListener('hashchange',()=>{const id=location.hash.slice(1);if(PAGES[id])go(id);});
+fetchPages();
+function fetchPages(){
+ document.querySelectorAll('.pg').forEach(p=>PAGES[p.id]=p);
+ renderNav();
+ const id=location.hash.slice(1);go(PAGES[id]?id:'dash');
+ document.getElementById('q').addEventListener('input',searchTopics);
+}
+function searchTopics(e){
+ const v=e.target.value.toLowerCase().trim();
+ if(!v){document.querySelectorAll('#side a.nav').forEach(a=>a.style.display='flex');return;}
+ document.querySelectorAll('#side a.nav').forEach(a=>{
+  const id=a.dataset.id;const pg=PAGES[id];
+  const hit=a.textContent.toLowerCase().includes(v)||(pg&&pg.textContent.toLowerCase().includes(v));
+  a.style.display=hit?'flex':'none';});
+}
+const QB=[
+{u:'U1',t:'Measures of Central Tendency',d:'Basic',ty:'Direct Numerical',s:'SRC',q:'Marks of 9 students: 45, 32, 37, 46, 39, 36, 41, 48, 36. Find arithmetic mean.',h:'Sum ÷ n',a:'40 marks'},
+{u:'U1',t:'Measures of Central Tendency',d:'Standard',ty:'Long Numerical',s:'SRC',q:'Weights of 60 apples (classes 65–84…185–204, f = 9,10,17,10,5,4,5). Mean via direct, short-cut and step-deviation methods.',h:'Midpoint table',a:'122.5 g'},
+{u:'U1',t:'Measures of Central Tendency',d:'Basic',ty:'Conceptual',s:'SRC',q:'State three properties of arithmetic mean.',h:'deviation-sum, minimization, origin-scale',a:'∑(xᵢ−x̄)=0; squared deviation minimized; affected by origin/scale'},
+{u:'U1',t:'Measures of Central Tendency',d:'University',ty:'Conceptual',s:'SRC',q:'Advantages and disadvantages of arithmetic mean.',h:'stability vs extreme values',a:'Adv: understood, algebraic, stable; Disadv: extreme-values, not inspection, may be non-actual'},
+{u:'U1',t:'Measures of Central Tendency',d:'Standard',ty:'Standard Numerical',s:'SRC',q:'Goals scored in 11 matches: 1,0,3,2,4,5,2,4,4,2,5. Find median.',h:'Sort → 6th value',a:'3'},
+{u:'U1',t:'Measures of Central Tendency',d:'Standard',ty:'Standard Numerical',s:'SRC',q:'Marks of 12 students 46,52,48,39,41,62,55,53,96,39,45,99. Median?',h:'Sort → avg 6&7',a:'50'},
+{u:'U1',t:'Measures of Central Tendency',d:'Basic',ty:'Direct Numerical',s:'SRC',q:'Mode of 5,10,3,7,2,9,6,2,11,2.',h:'frequency count',a:'2'},
+{u:'U1',t:'Measures of Central Tendency',d:'Standard',ty:'Conceptual',s:'GEN',q:'When is median preferred over mean? Justify with salary example.',h:'extreme values',a:'Extreme values distort mean; median robust (office salary example, mean 9400 vs 4 salaries far below)'},
+{u:'U1',t:'Combined & Weighted Mean',d:'Standard',ty:'Standard Numerical',s:'SRC',q:'Section A: 40 students avg 65; Section B: 35 students avg 70. Combined mean?',h:'n₁x̄₁+n₂x̄₂ over n₁+n₂',a:'67.33'},
+{u:'U1',t:'Combined & Weighted Mean',d:'Standard',ty:'Standard Numerical',s:'SRC',q:'25 male employees avg ₹40,000; 15 female avg ₹35,000. Combined salary?',h:'same formula',a:'₹38,125'},
+{u:'U1',t:'Combined & Weighted Mean',d:'University',ty:'Standard Numerical',s:'SRC',q:'Factory A: 10 workers @₹30; Factory B: 20 workers @₹15. Combined daily wages?',h:'(300+300)/30',a:'₹20'},
+{u:'U1',t:'Combined & Weighted Mean',d:'Challenging',ty:'Mixed Concept',s:'SRC',q:'All 90 workers avg ₹60; female avg ₹45; males are one-third. Male average?',h:'(30x+2700)/90=60',a:'₹90'},
+{u:'U1',t:'Combined & Weighted Mean',d:'University',ty:'Long Numerical',s:'SRC',q:'Prices ₹4.80,6,8,12,24 for 5 years. Avg cost if (a) 1000 units each year (b) 1000,800,600,400,200 units.',h:'simple vs weighted',a:'(a) ₹10.96 (b) ₹8.00'},
+{u:'U1',t:'Range & Quartile Deviation',d:'University',ty:'Mixed Concept',s:'SRC',q:'Weights of 11 men 148…236 lb. If heaviest omitted, % change in range?',h:'(168−47)/168',a:'≈72% decrease'},
+{u:'U1',t:'Range & Quartile Deviation',d:'Standard',ty:'Standard Numerical',s:'SRC',q:'Find Q1, Q3, Q.D. of 36,43,47,28,18,9,32.',h:'sort; (n+1)/4 & 3(n+1)/4',a:'Q1=18, Q3=43, Q.D.=12.5'},
+{u:'U1',t:'Range & Quartile Deviation',d:'Standard',ty:'Standard Numerical',s:'SRC',q:'Quartile deviation of 5,7,8,12,15,18,21,24,30.',h:'interpolate 2.5/7.5',a:'7.5'},
+{u:'U1',t:'Range & Quartile Deviation',d:'Basic',ty:'Direct Numerical',s:'SRC',q:'Q.D. of 2,4,6,8,10,12,14,16,18.',h:'Q1=5,Q3=15',a:'5'},
+{u:'U1',t:'Range & Quartile Deviation',d:'Standard',ty:'Direct Numerical',s:'SRC',q:'Coefficient of quartile deviation if Q1=20, Q3=50.',h:'(50−20)/(50+20)',a:'≈0.43'},
+{u:'U1',t:'Range & Quartile Deviation',d:'University',ty:'Conceptual',s:'SRC',q:'Merits and demerits of Range. When is Q.D. preferred?',h:'extreme items, open-end',a:'Demerits: extreme-sensitive, 2-point base, no algebra; Q.D. robust, skewed/open-end OK'},
+{u:'U1',t:'Mean Deviation',d:'University',ty:'Long Numerical',s:'SRC',q:'MD about median of 8,15,53,49,19,62,7,15,95,77.',h:'median 34; |x−34| sum',a:'27.2'},
+{u:'U1',t:'Mean Deviation',d:'University',ty:'Long Numerical',s:'SRC',q:'MD of X=10..14 with f=3,12,18,12,3.',h:'x̄=12 first',a:'0.75'},
+{u:'U1',t:'SD, Variance & CV',d:'Challenging',ty:'Standard Numerical',s:'SRC',q:'SD of 32 observations = 5, sum=80. Find ∑x².',h:'σ²=∑x²/n−x̄²',a:'1000'},
+{u:'U1',t:'SD, Variance & CV',d:'University',ty:'Long Numerical',s:'SRC',q:'SD of sesamum seed yields (classes 2.5–7.5, f=4,6,15,15,10) via step-deviation.',h:'table d, fd, fd²',a:'≈1.1677'},
+{u:'U1',t:'SD, Variance & CV',d:'University',ty:'Mixed Concept',s:'SRC',q:'Yield (50kg, SD10) vs plant height (55cm, SD5). Compare variability.',h:'CV comparison',a:'Yield CV 20% > height CV 9.1% → yield more variable'},
+{u:'U1',t:'SD, Variance & CV',d:'University',ty:'Conceptual',s:'SRC',q:'Merits and demerits of standard deviation.',h:'all observations, squaring',a:'Merits: based on all, algebraic, stable; Demerits: hard to compute, extreme-weight, absolute'},
+{u:'U1',t:'SD, Variance & CV',d:'University',ty:'Conceptual',s:'GEN',q:'Why is sample variance divisor n−1 instead of n?',h:'unbiased estimator',a:'n−1 corrects bias; sample underestimates σ² if divided by n'},
+{u:'U2',t:'Moments',d:'University',ty:'Conceptual',s:'SRC',q:'Define raw, central and arbitrary-point moments. Write formulas (grouped data).',h:'about A, mean, origin',a:'μ′r = Σf(x−A)ʳ/N; μr = Σf(x−x̄)ʳ/N; origin A=0'},
+{u:'U2',t:'Moment Relations',d:'University',ty:'Long Numerical',s:'SRC',q:'First four moments about 5 are 1,10,20,25. Find central moments, β₁, β₂.',h:'conversion formulas',a:'μ₂=19,μ₃=−33,μ₄=42; β₁≈0.159, β₂≈0.116'},
+{u:'U2',t:'Moment Relations',d:'Challenging',ty:'Long Numerical',s:'SRC',q:'Marks 5–35 with f=4,10,20,36,16,12,2. Find central moments, β₁, γ₁, β₂, γ₂.',h:'d=(x−20)/5 table',a:'μ₂=44.41,γ₁=−0.0422,β₂=2.7499,γ₂=−0.2501'},
+{u:'U2',t:'Moment Relations',d:'University',ty:'Theory/Derivation',s:'SRC',q:'Explain Sheppard corrections and when needed.',h:'grouping errors',a:'μ₂−=h²/12; valid when distribution tapers off to zero; invalid for skew/wide intervals'},
+{u:'U2',t:'Skewness',d:'University',ty:'Standard Numerical',s:'SRC',q:'Pearson Sₖ=0.64, σ=13, Mean=59.2. Mode & median?',h:'Mode=M−Skσ; 3Med−2Mean',a:'Mode≈50.88, Median≈56.43'},
+{u:'U2',t:'Skewness',d:'Standard',ty:'Direct Numerical',s:'SRC',q:'Pearson Sₖ=1.28, mean=164, mode=100. SD?',h:'σ=(164−100)/1.28',a:'50'},
+{u:'U2',t:'Skewness',d:'Challenging',ty:'Mixed Concept',s:'SRC',q:'Bowley Sₖ=1.2, Q₁+Q₃=200, median=76. Q₃?',h:'solve equation',a:'120'},
+{u:'U2',t:'Skewness',d:'University',ty:'Conceptual',s:'SRC',q:'State criteria of a good measure of skewness; absolute vs relative measures.',h:'unit-free, zero symmetric',a:'3 criteria; absolute (Mean−Mode etc.) not comparable; use coefficients'},
+{u:'U2',t:'Kurtosis',d:'Standard',ty:'Direct Numerical',s:'SRC',q:'First four central moments 0, 2.5, 0.7, 18.75. Skewness & kurtosis?',h:'β₁=μ₃²/μ₂³;β₂=μ₄/μ₂²',a:'β₁=0.031, β₂=3 (mesokurtic)'},
+{u:'U2',t:'Kurtosis',d:'Basic',ty:'Conceptual',s:'SRC',q:'Define leptokurtic, mesokurtic, platykurtic with β₂ thresholds.',h:'3 compare',a:'>3 peaked, =3 normal, <3 flat'},
+{u:'U2',t:'Kurtosis',d:'University',ty:'Mixed Concept',s:'SRC',q:'First four raw moments 2,136,320,40000. Coefficients of skewness and kurtosis.',h:'convert then ratios',a:'β₁≈0.1002, β₂≈2.333 (platykurtic)'},
+{u:'U2',t:'Kurtosis',d:'University',ty:'Conceptual',s:'GEN',q:'Why do we subtract 3 in excess kurtosis?',h:'normal baseline',a:'Normal curve has β₂=3; zero excess = mesokurtic'},
+{u:'U3',t:'Probability Basics',d:'Basic',ty:'Conceptual',s:'SRC',q:'Define random experiment, outcome, sample space, event with examples.',h:'die/coin examples',a:'Unpredictable experiment; possible result; all outcomes; subset of S'},
+{u:'U3',t:'Probability Basics',d:'Standard',ty:'Standard Numerical',s:'SRC',q:'Die: A=even, B=>4. Find P(A∪B).',h:'A∩B={6}',a:'2/3'},
+{u:'U3',t:'Probability Basics',d:'University',ty:'Conceptual',s:'SRC',q:'State addition, complement, multiplication laws of probability.',h:'∪ minus ∩, 1−P, P(A)P(B|A)',a:'See formulas; mutually exclusive → ∩ = 0'},
+{u:'U3',t:'Probability Basics',d:'University',ty:'Theory/Derivation',s:'SRC',q:'List probability identities P(S), P(∅), bounds, complement, P(A−B).',h:'1, 0, [0,1], 1−P(A)',a:'P(S)=1, P(ϕ)=0, 0≤P≤1, P(A′)=1−P(A), P(A−B)=P(A)−P(A∩B)'},
+{u:'U3',t:'Conditional Probability',d:'Standard',ty:'Standard Numerical',s:'SRC',q:'Card drawn: P(king | face card)?',h:'12 face, 4 kings',a:'1/3'},
+{u:'U3',t:'Conditional Probability',d:'Basic',ty:'Conceptual',s:'SRC',q:'Independent vs dependent events — define with examples.',h:'coins vs cards w/o replacement',a:'P(A∩B)=P(A)P(B) test for independence'},
+{u:'U3',t:'Conditional Probability',d:'University',ty:'Conceptual',s:'SRC',q:'State Bayes theorem. Applications?',h:'P(A|B)=P(B|A)P(A)/P(B)',a:'Medical testing, spam, ML, decision-making'},
+{u:'U3',t:'Random Variables',d:'University',ty:'Standard Numerical',s:'SRC',q:'Valid distributions? (i)P=(1/2,3/4) (ii)p(1)=−1/4 (iv)total≠1.',h:'sum=1 & p≥0',a:'all invalid — identify violated condition'},
+{u:'U3',t:'Random Variables',d:'University',ty:'Conceptual',s:'SRC',q:'Define PMF, PDF, CDF with conditions.',h:'Σp=1; ∫f=1; F=P[X≤x]',a:'PMF discrete Σ=1; PDF ∫f dx=1; CDF F′=f'},
+{u:'U3',t:'Random Variables',d:'Challenging',ty:'Long Numerical',s:'SRC',q:'PDF f(x)=Ax³ 0≤x≤1. A, P(0.2<X<0.5), P(X>3/4|X>1/2)?',h:'A=4; integrate',a:'4; 0.0609; 35/48'},
+{u:'U3',t:'Random Variables',d:'Standard',ty:'Standard Numerical',s:'SRC',q:'CDF table for X=0..7, P=0, .1, .2, .2, .3, .01, .02, .17.',h:'accumulate',a:'0,.1,.3,.5,.8,.81,.83,1'},
+{u:'U3',t:'Binomial Distribution',d:'University',ty:'Standard Numerical',s:'SRC',q:'Fair coin 6 tosses — P(4 or more heads)?',h:'Σ ⁶C_r/2⁶ r=4..6',a:'11/32 ≈ .34'},
+{u:'U3',t:'Binomial Distribution',d:'University',ty:'Standard Numerical',s:'SRC',q:'p=0.1 defective bolts, n=500. Mean & SD?',h:'np, √npq',a:'50, ≈6.71'},
+{u:'U3',t:'Binomial Distribution',d:'Challenging',ty:'Long Numerical',s:'SRC',q:'Fit binomial to 8 coins 256 throws; theoretical µ, σ; compare observed (4.062, 1.462).',h:'expected = ⁸C_r',a:'µ=4, σ=1.414'},
+{u:'U3',t:'Binomial Distribution',d:'University',ty:'Theory/Derivation',s:'SRC',q:'Assumptions of binomial distribution.',h:'2 outcomes, const p, independent, known n',a:'4 assumptions listed'},
+{u:'U3',t:'Poisson Distribution',d:'University',ty:'Standard Numerical',s:'SRC',q:'2% defective, shipment 200 — P(5 defectives) + mean, SD.',h:'m=4',a:'≈0.156; 4; 2'},
+{u:'U3',t:'Poisson Distribution',d:'Challenging',ty:'Mixed Concept',s:'SRC',q:'30 tools, p=0.02: P(4) via binomial vs Poisson.',h:'m=0.6',a:'0.00259 vs 0.00296'},
+{u:'U3',t:'Poisson Distribution',d:'University',ty:'Long Numerical',s:'SRC',q:'330 units defects 0:214,1:92,2:20,3:3,4:1. Fit Poisson.',h:'m=145/330',a:'m≈0.439 → E ≈ 212.8, 93.4, 20.5, 3.0, 0.3'},
+{u:'U3',t:'Poisson Distribution',d:'Standard',ty:'Conceptual',s:'SRC',q:'Features/characteristics of binomial and Poisson distributions.',h:'params, skew',a:'Bin: n,p; µ=np, σ=√npq. Poi: m; mean=variance=m; pos-skew'},
+{u:'U3',t:'Poisson Distribution',d:'University',ty:'Long Numerical',s:'SRC',q:'400 car ACs, defects 0..5 → counts 142,156,69,27,5,1. Expected frequencies (Poisson).',h:'m=1',a:'≈147.2,147.2,73.6,24.5,6.1,1.2'},
+{u:'U3',t:'Normal Distribution',d:'Basic',ty:'Direct Numerical',s:'SRC',q:'Find area (a) Z=1.54 (b) Z=−1.46 (c) right of 0.25 (d) left of 1.83.',h:'table + symmetry',a:'0.4382; 0.4279; 0.4013; 0.9664'},
+{u:'U3',t:'Normal Distribution',d:'University',ty:'Standard Numerical',s:'SRC',q:'Soldiers: µ=68.22, var=10.8, n=1000. # above 6 ft?',h:'Z=1.15',a:'≈125'},
+{u:'U3',t:'Normal Distribution',d:'University',ty:'Standard Numerical',s:'SRC',q:'µ=500, σ=100. P(<570)? P(430–580)?',h:'Z=0.7; add areas',a:'0.7580; 0.5461'},
+{u:'U3',t:'Normal Distribution',d:'University',ty:'Conceptual',s:'SRC',q:'Characteristics of normal distribution + why µ,σ suffice.',h:'bell, symmetric, unimodal',a:'curve fully determined by µ, σ; mean=median=mode'},
+{u:'U3',t:'Normal Distribution',d:'University',ty:'Theory/Derivation',s:'GEN',q:'Why do we standardize X to Z = (X−µ)/σ?',h:'single table works for all normals',a:'All normal curves have the same shape; Z maps to table of standard areas'}];
+QB.forEach((o,i)=>o.id='q'+i);
+function qbRender(){
+ const u=document.getElementById('funit').value, d=document.getElementById('fdiff').value, ty=document.getElementById('ftype').value, s=document.getElementById('fsearch').value.toLowerCase();
+ const out=QB.filter(o=>(!u||o.u===u)&&(!d||o.d===d)&&(!ty||o.ty===ty)&&(!s||o.q.toLowerCase().includes(s)||o.a.toLowerCase().includes(s)||o.t.toLowerCase().includes(s)));
+ document.getElementById('qcount').textContent=out.length+' / '+QB.length+' questions';
+ document.getElementById('qblist').innerHTML=out.map(o=>`<div class="qitem">
+ <p><b>[${o.u}] ${o.t}</b> · <span class="badge ${o.s==='SRC'?'b-src':'b-gen'}">${o.s==='SRC'?'SOURCE Q':'CONCEPT/CLINIC'}</span> <span class="badge b-theory">${o.d}</span> <span class="badge b-num">${o.ty}</span></p>
+ <p>${o.q}</p>
+ <button class="revealbtn" data-l="Show Hint" onclick="rev(this)">Show Hint</button><div class="hiddenb hinglish">${o.h}</div>
+ <button class="revealbtn" data-l="Reveal Answer" onclick="rev(this)">Reveal Answer</button><div class="hiddenb final">${o.a}</div>
+ </div>`).join('')||'<div class="qitem">No match found.</div>';
+ typeset();
+}
+['funit','fdiff','ftype','fsearch'].forEach(id=>document.getElementById(id).addEventListener('input',qbRender));
+qbRender();
+const QUIZ=[
+{q:'P(A∪B) formula (general) is:',opts:['P(A)+P(B)+P(A∩B)','P(A)+P(B)−P(A∩B)','P(A)×P(B|A)','P(A∩B)/P(B)'],a:1},
+{q:'For a symmetric distribution:',opts:['mean>median>mode','mean<median<mode','mean=median=mode','no relation'],a:2},
+{q:'The first central moment μ₁ always equals:',opts:['σ²','1','0','mean'],a:2},
+{q:'Coefficient of variation=',opts:['σ/x̄','(σ/x̄)×100','σ²/x̄','(x̄/σ)×100'],a:1},
+{q:'Bowley coefficient of skewness uses:',opts:['moments','deciles','quartiles','percentiles'],a:2},
+{q:'In Poisson distribution, mean and variance:',opts:['differ','are equal','undefined','always 0'],a:1},
+{q:'Excess kurtosis for a normal curve =',opts:['3','0','1','−3'],a:1},
+{q:'µ ± 2σ covers approximately:',opts:['68%','95.5%','99.7%','50%'],a:1},
+{q:'Binomial mean np, SD =',opts:['√(npq)','npq','√(np)','n/p'],a:0},
+{q:'f(x) of continuous r.v. =',opts:['F(x)','x·F(x)','F′(x)','∫F dx'],a:2}];
+function renderQuiz(){
+ document.getElementById('quizbox').innerHTML=QUIZ.map((o,i)=>`<div class="qitem"><p><b>Q${i+1}.</b> ${o.q}</p>
+ ${o.opts.map((op,j)=>`<label style="display:block;margin:4px 0;cursor:pointer"><input type="radio" name="q${i}" value="${j}" style="margin-right:8px">${op}</label>`).join('')}
+ <button class="revealbtn" data-l="Check" onclick="checkQ(${i},${o.a},this)">Check</button><div class="hiddenb"></div></div>`).join('');
+}
+function checkQ(i,a,btn){
+ const sel=document.querySelector(`input[name=q${i}]:checked`);const out=btn.nextElementSibling;
+ out.classList.remove('hiddenb');
+ if(!sel){out.innerHTML='<div class="warnb">Answer select karo pehle.</div>';return;}
+ const ok=+sel.value===a;
+ out.innerHTML=ok?'<div class="final">✔ Correct!</div>':`<div class="warnb">✘ Incorrect. Correct answer: ${QUIZ[i].opts[a]}</div>`;
+ out.style.display='block';
+}
+function gradeQuiz(){
+ let ok=0;QUIZ.forEach((o,i)=>{const s=document.querySelector(`input[name=q${i}]:checked`);if(s&&+s.value===o.a)ok++;});
+ const el=document.getElementById('quizscore');el.style.display='block';
+ el.innerHTML=`Score: <b>${ok} / ${QUIZ.length}</b> ${ok===QUIZ.length?'— perfect, exam ready!':ok>=7?'— solid, ab weak topics revise karo.':'— topics dobara padho aur Question Bank se practice karo.'}`;
+}
+renderQuiz();
+</script>
+</body>
+</html>
